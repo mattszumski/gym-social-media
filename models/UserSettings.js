@@ -1,27 +1,19 @@
 import sequelize from "../configs/dbConnection.js";
 import { DataTypes, Model } from "sequelize";
 
-class User extends Model {}
+class UserSettings extends Model {}
 
-User.init({
+UserSettings.init({
   id: {
     type: DataTypes.BIGINT,
     primaryKey: true,
     autoIncrement: true,
   },
-  email: {
-    type: DataTypes.STRING(256),
+  user_id: {
+    type: DataTypes.BIGINT,
     allowNull: false,
   },
-  username: {
-    type: DataTypes.STRING(256),
-    allowNull: false,
-  },
-  firstname: {
-    type: DataTypes.STRING(256),
-    allowNull: true,
-  },
-  lastname: {
+  language: {
     type: DataTypes.STRING(256),
     allowNull: true,
   },
