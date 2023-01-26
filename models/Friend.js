@@ -1,19 +1,22 @@
 import sequelize from "../configs/dbConnection.js";
 import { DataTypes, Model } from "sequelize";
-import User from "./User.js";
 
-class UserSettings extends Model {}
+class Friend extends Model {}
 
-UserSettings.init(
+Friend.init(
   {
     id: {
       type: DataTypes.BIGINT,
       primaryKey: true,
       autoIncrement: true,
     },
-    language: {
-      type: DataTypes.STRING(256),
-      allowNull: true,
+    user_id: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+    },
+    friend_id: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
     },
   },
   {
@@ -21,4 +24,4 @@ UserSettings.init(
   }
 );
 
-export default UserSettings;
+export default Friend;
