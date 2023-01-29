@@ -16,10 +16,20 @@ User.init(
     email: {
       type: DataTypes.STRING(256),
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: "Please enter your email address",
+        },
+      },
     },
     username: {
       type: DataTypes.STRING(256),
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: "Please enter username",
+        },
+      },
     },
     firstname: {
       type: DataTypes.STRING(256),
@@ -32,13 +42,14 @@ User.init(
   },
   {
     sequelize,
+    modelName: "user",
   }
 );
 
-User.hasOne(UserSettings);
+export const settingsAssociation = User.hasOne(UserSettings);
 UserSettings.belongsTo(User);
 
-User.hasOne(UserProfile);
+export const profileAssociation = User.hasOne(UserProfile);
 UserProfile.belongsTo(User);
 
 User.hasMany(Post);

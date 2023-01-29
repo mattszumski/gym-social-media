@@ -29,6 +29,7 @@ dbConnection
     console.error(`DB connection error. Error: ${error}`);
   });
 
+//dev function for rebuilding (force sync) db after changes
 setupDb();
 
 app.listen(port, () => {

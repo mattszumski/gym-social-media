@@ -1,1 +1,44 @@
-export const createUser = (userData) => {};
+import User, { profileAssociation, settingsAssociation } from "../models/User.js";
+
+export const createUserInDb = async (userData) => {
+  try {
+    const creationData = { ...userData, userSetting: {}, userProfile: {} };
+    const newUser = await User.create(creationData, { include: [settingsAssociation, profileAssociation] });
+    return newUser;
+  } catch (error) {
+    return Promise.reject(error.errors);
+  }
+};
+
+export const getDbUsers = async () => {
+  //TODO:Check filters and apply
+  const users = User.findAll({});
+
+  return users;
+};
+
+export const getDbUserWithId = async (id) => {
+  const user = User.findByPk(id);
+
+  return user;
+};
+
+export const editDbUserWithId = async (id, data) => {
+  const user = await getDbUserWithId(id);
+  if (user) {
+    user.update({ id, ...data });
+    return user;
+  }
+
+  return null;
+};
+
+export const deleteDbUserWithId = async (id) => {
+  const user = await getDbUserWithId(id);
+  if (user) {
+    const result = await user.destroy();
+    return result;
+  }
+
+  return null;
+};

@@ -25,11 +25,12 @@ UserProfile.init(
     },
     intrests: {
       type: DataTypes.STRING(256),
-      allowNull: false,
+      allowNull: true,
     },
   },
   {
     sequelize,
+    modelName: "userProfile",
   }
 );
 

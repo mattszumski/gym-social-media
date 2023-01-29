@@ -18,6 +18,7 @@ UserSettings.init(
   },
   {
     sequelize,
+    modelName: "userSettings",
   }
 );
 
