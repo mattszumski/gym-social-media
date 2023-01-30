@@ -20,6 +20,9 @@ User.init(
         notNull: {
           msg: "Please enter your email address",
         },
+        isEmail: {
+          msg: "Email is not valid",
+        },
       },
     },
     username: {
