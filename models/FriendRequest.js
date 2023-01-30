@@ -10,11 +10,11 @@ FriendRequest.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    user_id: {
+    userId: {
       type: DataTypes.BIGINT,
       allowNull: false,
     },
-    recipient_id: {
+    recipientId: {
       type: DataTypes.BIGINT,
       allowNull: false,
     },

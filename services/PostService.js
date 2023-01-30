@@ -1,4 +1,5 @@
 import Post from "../models/Post";
+import { getUserFriends } from "./FriendService";
 
 export const createPost = async (postData) => {
   try {
@@ -9,7 +10,7 @@ export const createPost = async (postData) => {
   }
 };
 
-export const getPost = (postId) => {
+export const getPostById = (postId) => {
   const post = Post.findByPk(postId);
   return post;
 };
@@ -22,6 +23,26 @@ export const getUserPosts = (userId) => {
   });
 };
 
+export const getUserFriendsPosts = async (userId) => {
+  //get user friends
+  const userFriends = await getUserFriends();
+  const userFriendsIds = userFriends.map((friend) => {
+    if (friend.userId === userId) {
+      return friend.friendId;
+    } else {
+      return friend.userId;
+    }
+  });
+
+  return Post.findAll({
+    where: {
+      userId: [...userFriendsIds],
+    },
+    order: ["createdAt", "DESC"],
+  });
+  //return posts beloning to them
+};
+
 export const editPost = async (postId, postData) => {
   try {
     const post = await Post.update({ postId, ...postData });
@@ -29,4 +50,12 @@ export const editPost = async (postId, postData) => {
   } catch (error) {
     Promise.reject(error);
   }
+};
+
+export const deletePost = async (postId) => {
+  const post = await getPostById(postId);
+  if (post) {
+    return post.destroy();
+  }
+  return Promise.reject("Post not found");
 };

@@ -10,11 +10,11 @@ Friend.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    user_id: {
+    userId: {
       type: DataTypes.BIGINT,
       allowNull: false,
     },
-    friend_id: {
+    friendId: {
       type: DataTypes.BIGINT,
       allowNull: false,
     },
@@ -23,5 +23,6 @@ Friend.init(
     sequelize,
   }
 );
+//TODO: add validation if both of the users exists in db
 
 export default Friend;
