@@ -1,9 +1,9 @@
-import Post from "../models/Post";
-import { getUserFriends } from "./FriendService";
+import Post from "../models/Post.js";
+import { getUserFriends } from "./FriendService.js";
 
 export const createPost = async (postData) => {
   try {
-    const post = await new Post.create({ ...postData });
+    const post = await Post.create({ ...postData });
     return post;
   } catch (error) {
     Promise.reject(error);
@@ -45,7 +45,8 @@ export const getUserFriendsPosts = async (userId) => {
 
 export const editPost = async (postId, postData) => {
   try {
-    const post = await Post.update({ postId, ...postData });
+    const post = await getPostById(postId);
+    post.update({ ...postData, edited: true });
     return post;
   } catch (error) {
     Promise.reject(error);

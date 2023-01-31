@@ -5,6 +5,8 @@ import { setupDb } from "./services/dbService.js";
 import User from "./models/User.js";
 import Post from "./models/Post.js";
 import userRouter from "./routes/UserRouter.js";
+import postRouter from "./routes/PostRouter.js";
+import friendRouter from "./routes/FriendRouter.js";
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.use(express.json());
 const port = process.env.port || 3500;
 
 app.use("/user", userRouter);
+app.use("/post", postRouter);
+app.use("/friend", friendRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -30,7 +34,7 @@ dbConnection
   });
 
 //dev function for rebuilding (force sync) db after changes
-setupDb();
+// setupDb();
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);

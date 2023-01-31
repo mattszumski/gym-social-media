@@ -48,6 +48,19 @@ export const getUserWithIdRoute = (req, res) => {
     });
 };
 
+export const getUserDataRoute = (req, res) => {
+  const userId = req.params.id;
+
+  getUserData(userId)
+    .then((result) => {
+      res.status(200).json(result).send();
+    })
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(400);
+    });
+};
+
 export const editUserWithIdRoute = (req, res) => {
   const userId = req.params.id;
   editDbUserWithId(userId, req.body)

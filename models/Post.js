@@ -15,6 +15,10 @@ Post.init(
     text: {
       type: DataTypes.STRING(),
       allowNull: false,
+      validate: {
+        notEmpty: { msg: "Please enter text" },
+        notNull: { msg: "Please enter text" },
+      },
     },
     //TODO: check how photos/videos will be stored and add proper data to retreive it
     media: {
