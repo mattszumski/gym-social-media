@@ -42,6 +42,12 @@ User.init(
       type: DataTypes.STRING(256),
       allowNull: true,
     },
+    fullname: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return `${this.firstname} ${this.lastname}`;
+      },
+    },
   },
   {
     sequelize,

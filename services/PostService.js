@@ -34,13 +34,13 @@ export const getUserFriendsPosts = async (userId) => {
     }
   });
 
+  //return posts beloning to them
   return Post.findAll({
     where: {
       userId: [...userFriendsIds],
     },
     order: ["createdAt", "DESC"],
   });
-  //return posts beloning to them
 };
 
 export const editPost = async (postId, postData) => {

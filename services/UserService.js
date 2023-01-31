@@ -1,4 +1,6 @@
 import User, { profileAssociation, settingsAssociation } from "../models/User.js";
+import UserProfile from "../models/UserProfile.js";
+import UserSettings from "../models/UserSettings.js";
 
 export const createUserInDb = async (userData) => {
   try {
@@ -21,6 +23,15 @@ export const getDbUserWithId = async (id) => {
   const user = User.findByPk(id);
 
   return user;
+};
+
+export const getUserData = async (userId) => {
+  return User.findOne({
+    where: {
+      id: userId,
+    },
+    include: [{ model: UserProfile, attributes: ["city", "gym", "about"] }, UserSettings],
+  });
 };
 
 export const editDbUserWithId = async (id, data) => {
