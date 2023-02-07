@@ -8,9 +8,13 @@ export const createNewUserRoute = (req, res) => {
     return res.status(400).json({ validationErrors: validationErrors.array() });
   }
 
+  //check password
+
   createUserInDb({ ...req.body })
     .then((result) => {
       return res.sendStatus(201);
+      //TODO
+      //create userAuth file with authorization information
     })
     .catch((error) => {
       console.log(error);

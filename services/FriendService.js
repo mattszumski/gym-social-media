@@ -1,5 +1,6 @@
 import Friend from "../models/Friend.js";
 import FriendRequest from "../models/FriendRequest.js";
+import { Op } from "sequelize";
 
 export const addFriend = async (userId, friendId) => {
   try {

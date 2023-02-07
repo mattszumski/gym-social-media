@@ -2,8 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import dbConnection from "./configs/dbConnection.js";
 import { setupDb } from "./services/dbService.js";
-import User from "./models/User.js";
-import Post from "./models/Post.js";
 import userRouter from "./routes/UserRouter.js";
 import postRouter from "./routes/PostRouter.js";
 import friendRouter from "./routes/FriendRouter.js";
