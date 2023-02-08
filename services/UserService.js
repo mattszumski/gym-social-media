@@ -53,3 +53,15 @@ export const deleteDbUserWithId = async (id) => {
 
   return null;
 };
+
+export const getUserByUsername = () => {
+  //TODO
+};
+
+export const getUserByEmail = () => {
+  //TODO
+};
+
+export const checkIfUserExistsInDb = (email, username) => {
+  //TODO
+};
