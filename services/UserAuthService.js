@@ -1,7 +1,16 @@
 import UserAuth from "../models/UserAuth.js";
 import User from "../models/User.js";
 import { Op, fn, col, where } from "sequelize";
-import { signJWT, validatePassword } from "../utils/AuthUtils.js";
+import { hashPassword, signJWT, validatePassword } from "../utils/AuthUtils.js";
+
+export const createUserAuthInDb = async (userId, password) => {
+  const { salt, hashedPassword } = hashPassword(password);
+  try {
+    return UserAuth.create({ userId, password: hashedPassword, salt });
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
 
 export const getUserIdByEmailOrUsername = (input) => {
   const normalizedInput = input.toLowerCase();
@@ -38,6 +47,7 @@ export const authenticateUser = async (userId, password) => {
   //get data from request
   const authData = await getUserAuthDataByUserId(userId);
 
+  console.log(userId);
   // check against db data
   const passwordValidated = validatePassword(password, authData.password, authData.salt);
 

@@ -1,6 +1,8 @@
+import { Op, fn, col, where } from "sequelize";
 import User, { profileAssociation, settingsAssociation } from "../models/User.js";
 import UserProfile from "../models/UserProfile.js";
 import UserSettings from "../models/UserSettings.js";
+import { getUserIdByEmailOrUsername } from "./UserAuthService.js";
 
 export const createUserInDb = async (userData) => {
   try {
@@ -54,14 +56,32 @@ export const deleteDbUserWithId = async (id) => {
   return null;
 };
 
-export const getUserByUsername = () => {
-  //TODO
+export const getUserByColumn = (input, columnName) => {
+  if (!input || !columnName) {
+    return null;
+  }
+
+  const normalizedInput = input.toLowerCase();
+  try {
+    return User.findOne({
+      where: {
+        [Op.or]: where(fn("LOWER", col(`${columnName}`)), input),
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    Promise.reject({ success: false, reason: "Bad request" });
+  }
 };
 
-export const getUserByEmail = () => {
-  //TODO
-};
+export const checkIfUserExistsInDb = async (email, username) => {
+  const emailExists = await getUserByColumn(email, "email");
+  const usernameExists = await getUserByColumn(username, "username");
+  console.log(emailExists);
+  console.log(usernameExists);
 
-export const checkIfUserExistsInDb = (email, username) => {
-  //TODO
+  if (emailExists || usernameExists) {
+    return true;
+  }
+  return false;
 };

@@ -7,7 +7,13 @@ const options = {
 
 export default (passport) => {
   passport.use(
-    new JwtStrategy(options, function (payload, done) {
+    new JwtStrategy(options, async function (payload, done) {
+      try {
+        return null, token.user;
+      } catch (error) {
+        done(error);
+      }
+
       //find user, by extracting id from token
       //check for db error
       //check if user exists

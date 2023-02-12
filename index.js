@@ -5,6 +5,7 @@ import { setupDb } from "./services/dbService.js";
 import userRouter from "./routes/UserRouter.js";
 import postRouter from "./routes/PostRouter.js";
 import friendRouter from "./routes/FriendRouter.js";
+import authRouter from "./routes/AuthRoute.js";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 const port = process.env.port || 3500;
 
+app.use("/auth/", authRouter);
 app.use("/user", userRouter);
 app.use("/post", postRouter);
 app.use("/friend", friendRouter);

@@ -1,10 +1,26 @@
 import { Router } from "express";
-import { body, validationResult } from "express-validator";
-import { createNewUserRoute, getAllUsersRoute, getUserWithIdRoute, getUserDataRoute, editUserWithIdRoute, deleteUserWithIdRoute } from "../controllers/UserController.js";
+import { createNewUserRoute, deleteUserWithIdRoute, editUserWithIdRoute, getAllUsersRoute, getUserDataRoute, getUserWithIdRoute } from "../controllers/UserController.js";
 import { editUserProfileRoute, getUserProfileRoute } from "../controllers/UserProfileController.js";
 import { getUserData } from "../services/UserService.js";
 
+//DEV
+import { getUserAuthDataByLogin, authenticateUser } from "../services/UserAuthService.js";
+import { hashPassword } from "../utils/AuthUtils.js";
+
 const router = Router();
+
+router.route("/test").get(async (req, res) => {
+  const input = req.body.input;
+  const user = await getUserAuthDataByLogin(input);
+  return res.sendStatus(200);
+});
+
+router.route("/pass").post(async (req, res) => {
+  const { password } = req.body;
+  console.log(password);
+  const saltAndHash = hashPassword(password);
+  return res.status(200).json(saltAndHash);
+});
 
 router.route("/").get(getAllUsersRoute).post(createNewUserRoute);
 router.route("/:id").get(getUserWithIdRoute).patch(editUserWithIdRoute).delete(deleteUserWithIdRoute);
