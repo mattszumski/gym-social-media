@@ -47,7 +47,6 @@ export const authenticateUser = async (userId, password) => {
   //get data from request
   const authData = await getUserAuthDataByUserId(userId);
 
-  console.log(userId);
   // check against db data
   const passwordValidated = validatePassword(password, authData.password, authData.salt);
 
@@ -57,4 +56,12 @@ export const authenticateUser = async (userId, password) => {
   }
 
   return "";
+};
+
+export const createLogoutToken = () => {
+  const data = {
+    loggedOut: true,
+  };
+
+  return signJWT(data);
 };

@@ -3,8 +3,8 @@
 1. Finish auth routes
    1. Finish signup route - completed [x]
       1. Finish creating whole user account on signup - User, User Profile, User Settings - completed [x]
-   2. Finish login route - completed [ ]
-   3. Finish logout route - completed [ ]
+   2. Finish login route - completed [x]
+   3. Finish logout route - completed [x]
 2. Add middleware for secured routes - completed [ ]
 3. Add checking if user can do certain action - completed [ ]
    1. Check if given user can send the friend request (senderId is the same as one in token) - completed [ ]

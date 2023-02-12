@@ -1,4 +1,4 @@
-import { authenticateUser, getUserIdByEmailOrUsername, createUserAuthInDb } from "../services/UserAuthService.js";
+import { authenticateUser, getUserIdByEmailOrUsername, createUserAuthInDb, createLogoutToken } from "../services/UserAuthService.js";
 import { checkIfUserExistsInDb, createUserInDb } from "../services/UserService.js";
 
 const httpCookieOptions = {
@@ -26,10 +26,9 @@ export const singupRoute = async (req, res) => {
   }
 
   createUserAuthInDb(newUser.id, password)
-    .then((result) => {
-      console.log(result);
-      const token = authenticateUser(newUser.id, password);
-      res.status(201).cookie("token", token, httpCookieOptions).send();
+    .then(async (result) => {
+      const token = await authenticateUser(newUser.id, password);
+      return res.cookie("token", token, httpCookieOptions).send();
     })
     .catch((error) => {
       console.log(error);
@@ -39,6 +38,9 @@ export const singupRoute = async (req, res) => {
 
 export const loginRoute = async (req, res) => {
   const { authfield, password } = req.body;
+  if (!authfield || !password) {
+    res.status(400).json({ success: false, reason: `Required data is missing` });
+  }
 
   const user = await getUserIdByEmailOrUsername(authfield);
   if (!user) {
@@ -46,15 +48,14 @@ export const loginRoute = async (req, res) => {
   }
 
   const authResult = await authenticateUser(user.id, password);
-  //TODO:
-  //if success, send back token
   if (authResult.length > 0) {
     return res.cookie("token", authResult, httpCookieOptions).send();
   }
-  //if failure, send back error
   return res.sendStatus(401);
 };
 
 export const logoutRoute = (req, res) => {
-  //TODO
+  //TODO test in real environment
+  const logoutToken = createLogoutToken();
+  return res.cookie("token", logoutToken, { maxAge: 0, secure: false, httpOnly: true }).send();
 };
