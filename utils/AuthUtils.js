@@ -16,15 +16,11 @@ export const hashPassword = (password) => {
   return { salt, hashedPassword };
 };
 
-export const signJWT = (userData = {}) => {
+export const signJWT = (userData) => {
   const payload = {
-    userId: 1,
-    username: "admin",
+    userId: userData.userId,
+    username: userData.username,
   };
-  //   const payload = {
-  //     userId: userData.userId,
-  //     username: userData.username,
-  //   };
 
   const options = {
     expiresIn: "1d",

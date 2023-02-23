@@ -1,7 +1,7 @@
 import { createPost, deletePost, editPost, getPostById, getUserPosts } from "../services/PostService.js";
 
 export const createPostRoute = (req, res) => {
-  createPost(req.body)
+  createPost({ userId: req.user, ...req.body })
     .then((result) => {
       res.status(200).json(result);
     })
@@ -35,7 +35,7 @@ export const getPostForUserRoute = (req, res) => {
 };
 
 export const getPostForUserDashboardRoute = (req, res) => {
-  const { userId } = req.body;
+  const userId = req.user;
   if (!userId) {
     res.sendStatus(400);
   }
@@ -50,6 +50,7 @@ export const getPostForUserDashboardRoute = (req, res) => {
 };
 
 export const editPostRoute = (req, res) => {
+  //TODO: Add checking if user can edit given post
   const postId = req.params.postId;
   editPost(postId, req.body)
     .then((result) => {
@@ -62,6 +63,7 @@ export const editPostRoute = (req, res) => {
 };
 
 export const deletePostRoute = (req, res) => {
+  //TODO: Add checking if user can delete given post
   const postId = req.params.postId;
   deletePost(postId);
   res.sendStatus(200);

@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator";
 import { createUserInDb, getDbUsers, getDbUserWithId, editDbUserWithId, deleteDbUserWithId } from "../services/UserService.js";
 
+//CHECK IF NEEDED
 export const createNewUserRoute = (req, res) => {
   //validate data
   const validationErrors = validationResult(req);
@@ -28,7 +29,7 @@ export const getAllUsersRoute = (req, res) => {
   //TODO: To be used only with filters (users looks for other users by search)
   getDbUsers()
     .then((result) => {
-      res.status(200).json(result);
+      res.status(201).json(result);
     })
     .catch((error) => {
       console.log(error);

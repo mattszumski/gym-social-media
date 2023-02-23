@@ -9,8 +9,9 @@ export default (passport) => {
   passport.use(
     new JwtStrategy(options, async function (payload, done) {
       try {
-        return null, token.user;
+        return done(null, payload.userId);
       } catch (error) {
+        console.log(error);
         done(error);
       }
 

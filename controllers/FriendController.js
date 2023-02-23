@@ -1,7 +1,8 @@
 import { addFriend, getUserFriends, removeFriend, createFriendRequest, removeFriendRequest } from "../services/FriendService.js";
 
 export const addFriendRoute = (req, res) => {
-  const { userId, friendId } = req.body;
+  const userId = req.user;
+  const { friendId } = req.body;
   if (!userId || !friendId) {
     return res.sendStatus(400);
   }
@@ -17,10 +18,10 @@ export const addFriendRoute = (req, res) => {
 };
 
 export const getUserFriendsRoute = (req, res) => {
-  const { userId } = req.body;
+  const userId = req.user;
   getUserFriends(userId)
     .then((result) => {
-      res.status(200).json(result).send();
+      res.status(201).json(result).send();
     })
     .catch((error) => {
       console.log(error);
@@ -29,7 +30,8 @@ export const getUserFriendsRoute = (req, res) => {
 };
 
 export const removeFriendRoute = (req, res) => {
-  const { userId, friendId } = req.body;
+  const userId = req.user;
+  const { friendId } = req.body;
   removeFriend(userId, friendId)
     .then((result) => {
       res.status(200).json(result).send();
@@ -41,7 +43,8 @@ export const removeFriendRoute = (req, res) => {
 };
 
 export const createFriendRequestRoute = (req, res) => {
-  const { userId, senderId } = req.body;
+  const userId = req.user;
+  const { senderId } = req.body;
   if (!userId || !senderId) {
     return res.sendStatus(400);
   }
@@ -55,7 +58,8 @@ export const createFriendRequestRoute = (req, res) => {
     });
 };
 export const removeFriendRequestRoute = (req, res) => {
-  const { userId, senderId } = req.body;
+  const userId = req.user;
+  const { senderId } = req.body;
   if (!userId || !senderId) {
     return res.sendStatus(400);
   }
