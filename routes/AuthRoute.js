@@ -4,7 +4,7 @@ import { loginRoute, logoutRoute, singupRoute } from "../controllers/AuthControl
 const router = Router();
 
 router.route("/login").post(loginRoute);
-router.route("/logout").post(logoutRoute);
+router.route("/logout").get(logoutRoute);
 router.route("/signup").post(singupRoute);
 
 export default router;

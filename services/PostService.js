@@ -16,7 +16,7 @@ export const getPostById = (postId) => {
 };
 
 export const getUserPosts = (userId) => {
-  const userPosts = Post.findAll({
+  return Post.findAll({
     where: {
       userId,
     },
