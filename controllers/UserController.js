@@ -54,7 +54,7 @@ export const getUserWithIdRoute = (req, res) => {
 };
 
 export const getUserDataRoute = (req, res) => {
-  const userId = req.params.id;
+  const userId = req.user;
 
   getUserData(userId)
     .then((result) => {

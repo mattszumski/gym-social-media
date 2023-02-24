@@ -10,9 +10,9 @@ export const getUserProfileData = async (id) => {
 };
 
 export const getUserProfileDataByUserId = async (userId) => {
-  const userProfile = UserProfile.findOne({ where: { userId } });
-  if (userProfile) {
-    return UserProfile;
+  const userProfileData = await UserProfile.findOne({ where: { userId } });
+  if (userProfileData) {
+    return userProfileData;
   }
 
   return null;

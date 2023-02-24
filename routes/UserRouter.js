@@ -22,6 +22,6 @@ router
   .patch(passport.authenticate("jwt", { session: false }), editUserProfileRoute);
 //TODO
 router.route("/settings/:id").get().patch();
-router.route("/data/:id").get(getUserDataRoute);
+router.route("/data/:id").get(passport.authenticate("jwt", { session: false }), getUserDataRoute);
 
 export default router;

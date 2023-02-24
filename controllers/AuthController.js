@@ -49,7 +49,7 @@ export const loginRoute = async (req, res) => {
 
   const authResult = await authenticateUser(user.id, password);
   if (authResult.length > 0) {
-    return res.cookie("token", authResult, httpCookieOptions).send();
+    return res.cookie("token", authResult, httpCookieOptions).json({ userId: user.id }).send();
   }
   return res.sendStatus(401);
 };

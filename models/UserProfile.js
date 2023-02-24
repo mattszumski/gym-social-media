@@ -23,6 +23,7 @@ UserProfile.init(
       type: DataTypes.STRING(512),
       allowNull: true,
     },
+    //TODO: fix typo to - interests
     intrests: {
       type: DataTypes.STRING(256),
       allowNull: true,
