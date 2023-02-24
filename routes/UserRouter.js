@@ -2,6 +2,7 @@ import { Router } from "express";
 import passport from "passport";
 import { createNewUserRoute, deleteUserWithIdRoute, editUserWithIdRoute, getAllUsersRoute, getUserDataRoute, getUserWithIdRoute } from "../controllers/UserController.js";
 import { editUserProfileRoute, getUserProfileRoute } from "../controllers/UserProfileController.js";
+import { getUserSettingsRoute, editUserSettingsRoute } from "../controllers/UserSettingsController.js";
 import { getUserData } from "../services/UserService.js";
 
 //DEV
@@ -21,7 +22,10 @@ router
   .get(getUserProfileRoute)
   .patch(passport.authenticate("jwt", { session: false }), editUserProfileRoute);
 //TODO
-router.route("/settings/:id").get().patch();
+router
+  .route("/settings/:id")
+  .get(passport.authenticate("jwt", { session: false }), getUserSettingsRoute)
+  .patch(passport.authenticate("jwt", { session: false }), editUserSettingsRoute);
 router.route("/data/:id").get(passport.authenticate("jwt", { session: false }), getUserDataRoute);
 
 export default router;

@@ -24,3 +24,8 @@
 
 1. Reactions
 2. Chat
+
+#To be added (utilities, improvements)
+
+1. Caching (Redis?)
+2. Logging

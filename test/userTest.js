@@ -12,6 +12,7 @@ let testUsername = process.env.TEST_ACOUNT_USERNAME;
 let testPassword = process.env.TEST_ACCOUNT_PASSWORD;
 let testEmail = process.env.TEST_ACOUNT_EMAIL;
 let testUserId = 0;
+const testRandomInt = Math.floor(Math.random() * 10000 + 1);
 
 describe("User test", async function () {
   const payload = { authfield: testUsername, password: testPassword };
@@ -65,7 +66,6 @@ describe("User test", async function () {
     });
 
     it("User can modify its own profile data", async function () {
-      const testRandomInt = Math.floor(Math.random() * 10000 + 1);
       const city = `cityTest${testRandomInt}`;
       const gym = `gymTest${testRandomInt}`;
       const about = `aboutTest${testRandomInt}`;
@@ -76,11 +76,34 @@ describe("User test", async function () {
         .set("Authorization", "Bearer " + jwtCookie)
         .send(payload);
 
-      console.log(userProfilePatchResponse.body);
       expect(userProfilePatchResponse.status).to.be.equal(200);
       expect(userProfilePatchResponse.body.city).to.be.equal(city);
       expect(userProfilePatchResponse.body.gym).to.be.equal(gym);
       expect(userProfilePatchResponse.body.about).to.be.equal(about);
+    });
+  });
+
+  describe("User settings test", async function () {
+    it("User can get its own settings data", async function () {
+      const userSettingsResponse = await agent
+        .get(`/user/settings/${testUserId}`)
+        .set("Authorization", "Bearer " + jwtCookie)
+        .send();
+
+      expect(userSettingsResponse.status).to.be.equal(200);
+      expect(userSettingsResponse.body).to.have.property("language");
+    });
+
+    it("User can change its own settings data", async function () {
+      const language = `languageTest${testRandomInt}`;
+      const payload = { language };
+      const userSettingsPatchResponse = await agent
+        .patch(`/user/settings/${testUserId}`)
+        .set("Authorization", "Bearer " + jwtCookie)
+        .send(payload);
+
+      expect(userSettingsPatchResponse.status).to.be.equal(200);
+      expect(userSettingsPatchResponse.body.language).to.be.equal(language);
     });
   });
 });

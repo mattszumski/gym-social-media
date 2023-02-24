@@ -10,18 +10,18 @@ export const getUserSettingsData = async (id) => {
 };
 
 export const getUserSettingsDataByUserId = async (userId) => {
-  const userSettings = UserSettings.findOne({ userId });
-  if (userSettings) {
-    return UserSettings;
+  const userSettingsData = await UserSettings.findOne({ userId });
+  if (userSettingsData) {
+    return userSettingsData;
   }
-
   return null;
 };
 
-export const editUserSettingsData = async (id, data) => {
-  const userSettings = await getUserSettingsData(id);
+export const editUserSettingsData = async (userId, data) => {
+  console.log(data);
+  const userSettings = await getUserSettingsDataByUserId(userId);
   if (userSettings) {
-    return userSettings.update({ id, ...data });
+    return userSettings.update(data);
   }
   return null;
 };
