@@ -3,3 +3,4 @@
 [] User deletion: change flow of userProfile/userSettings deletion - these should delete with userDeletion and there should be no way to delete them separately
 [] UserSettings: create list/validators of acceptable values (example: language can only be certain codes like en, pl etc.)
 [] authTest: Delete user after creation and testing
+[] FriendService: Add Check to determine if friend is not already added

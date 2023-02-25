@@ -3,6 +3,7 @@ import FriendRequest from "../models/FriendRequest.js";
 import { Op } from "sequelize";
 
 export const addFriend = async (userId, friendId) => {
+  //TODO: Check if friend is not already added
   try {
     const friend = Friend.create({ userId, friendId });
   } catch (error) {
@@ -44,7 +45,7 @@ export const createFriendRequest = async (userId, recipientId) => {
 };
 
 export const removeFriendRequest = async (userId, senderId) => {
-  const friendRequest = FriendRequest.findOne({
+  const friendRequest = await FriendRequest.findOne({
     where: { recipientId: userId, userId: senderId },
   });
   if (friendRequest) {

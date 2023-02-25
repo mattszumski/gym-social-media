@@ -9,7 +9,7 @@ export const addFriendRoute = (req, res) => {
 
   addFriend(userId, friendId)
     .then((result) => {
-      res.status(200).json(result).send();
+      res.status(201).json(result).send();
     })
     .catch((error) => {
       console.log(error);
@@ -21,7 +21,7 @@ export const getUserFriendsRoute = (req, res) => {
   const userId = req.user;
   getUserFriends(userId)
     .then((result) => {
-      res.status(201).json(result).send();
+      res.status(200).json(result).send();
     })
     .catch((error) => {
       console.log(error);
@@ -50,7 +50,7 @@ export const createFriendRequestRoute = (req, res) => {
   }
   createFriendRequest(userId, senderId)
     .then((result) => {
-      res.status(200).json(result).send();
+      res.status(201).json(result).send();
     })
     .catch((error) => {
       console.log(error);
