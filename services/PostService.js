@@ -25,7 +25,7 @@ export const getUserPosts = (userId) => {
 
 export const getUserFriendsPosts = async (userId) => {
   //get user friends
-  const userFriends = await getUserFriends();
+  const userFriends = await getUserFriends(userId);
   const userFriendsIds = userFriends.map((friend) => {
     if (friend.userId === userId) {
       return friend.friendId;
@@ -39,7 +39,7 @@ export const getUserFriendsPosts = async (userId) => {
     where: {
       userId: [...userFriendsIds],
     },
-    order: ["createdAt", "DESC"],
+    order: [["createdAt", "DESC"]],
   });
 };
 

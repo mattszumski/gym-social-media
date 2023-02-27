@@ -10,7 +10,6 @@ const agent = request.agent(localAddress);
 let jwtCookie = "";
 let testUsername = process.env.TEST_ACCOUNT_USERNAME;
 let testPassword = process.env.TEST_ACCOUNT_PASSWORD;
-let testEmail = process.env.TEST_ACCOUNT_EMAIL;
 let testUserId = 0;
 const testRandomInt = Math.floor(Math.random() * 10000 + 1);
 

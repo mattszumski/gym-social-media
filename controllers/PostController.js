@@ -1,9 +1,9 @@
-import { createPost, deletePost, editPost, getPostById, getUserPosts } from "../services/PostService.js";
+import { createPost, deletePost, editPost, getPostById, getUserPosts, getUserFriendsPosts } from "../services/PostService.js";
 
 export const createPostRoute = (req, res) => {
   createPost({ userId: req.user, ...req.body })
     .then((result) => {
-      res.status(200).json(result);
+      res.status(201).json(result);
     })
     .catch((error) => {
       res.status(400).json(error);
@@ -14,7 +14,10 @@ export const getPostRoute = (req, res) => {
   const postId = req.params.postId;
   getPostById(postId)
     .then((result) => {
-      return res.status(200).json(result);
+      if (result) {
+        return res.status(200).json(result);
+      }
+      return res.status(404).json({ success: false, reason: "Not found" });
     })
     .catch((error) => {
       console.log(error);
@@ -24,6 +27,10 @@ export const getPostRoute = (req, res) => {
 
 export const getPostForUserRoute = (req, res) => {
   const userId = req.params.userId;
+  if (!userId) {
+    res.sendStatus(400);
+  }
+
   getUserPosts(userId)
     .then((result) => {
       return res.status(200).json(result);
@@ -39,7 +46,7 @@ export const getPostForUserDashboardRoute = (req, res) => {
   if (!userId) {
     res.sendStatus(400);
   }
-  getUserPosts(userId)
+  getUserFriendsPosts(userId)
     .then((result) => {
       return res.status(200).json(result);
     })
@@ -65,6 +72,12 @@ export const editPostRoute = (req, res) => {
 export const deletePostRoute = (req, res) => {
   //TODO: Add checking if user can delete given post
   const postId = req.params.postId;
-  deletePost(postId);
-  res.sendStatus(200);
+  deletePost(postId)
+    .then((result) => {
+      return res.status(204).json(result);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(400);
+    });
 };

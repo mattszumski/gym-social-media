@@ -9,13 +9,11 @@ const localAddress = "http://localhost:4000";
 const agent = request.agent(localAddress);
 const testUsername = process.env.TEST_ACCOUNT_USERNAME;
 const testPassword = process.env.TEST_ACCOUNT_PASSWORD;
-const testEmail = process.env.TEST_ACCOUNT_EMAIL;
 let testUserId = 0;
 let jwtCookie = "";
 
 const testUsername2 = process.env.TEST_ACCOUNT_USERNAME2;
 const testPassword2 = process.env.TEST_ACCOUNT_PASSWORD2;
-const testEmail2 = process.env.TEST_ACCOUNT_EMAIL2;
 let testUserId2 = 0;
 let jwtCookie2 = "";
 const testRandomInt = Math.floor(Math.random() * 10000 + 1);
