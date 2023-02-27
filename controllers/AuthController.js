@@ -44,7 +44,7 @@ export const loginRoute = async (req, res) => {
 
   const user = await getUserIdByEmailOrUsername(authfield);
   if (!user) {
-    res.status(400).json({ success: false, reason: `User not found` });
+    return res.status(400).json({ success: false, reason: `User not found` });
   }
 
   const authResult = await authenticateUser(user.id, password);

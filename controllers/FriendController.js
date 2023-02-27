@@ -1,10 +1,16 @@
-import { addFriend, getUserFriends, removeFriend, createFriendRequest, removeFriendRequest } from "../services/FriendService.js";
+import { addFriend, getUserFriends, removeFriend, createFriendRequest, removeFriendRequest, checkIfUsersAreAlreadyFriends } from "../services/FriendService.js";
 
-export const addFriendRoute = (req, res) => {
+export const addFriendRoute = async (req, res) => {
   const userId = req.user;
   const { friendId } = req.body;
   if (!userId || !friendId) {
     return res.sendStatus(400);
+  }
+
+  const alreadyFriends = await checkIfUsersAreAlreadyFriends(userId, friendId);
+
+  if (alreadyFriends) {
+    return res.status(400).json({ success: false, reason: "Users are already friends" }).send();
   }
 
   addFriend(userId, friendId)

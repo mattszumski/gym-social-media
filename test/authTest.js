@@ -6,11 +6,12 @@ const agent = request.agent(localAddress);
 let jwtCookie = "";
 const randomIdForTest = Math.floor(Math.random() * 100000 + 1);
 const username = `test${randomIdForTest}`;
+const password = `pass123`;
 
 describe("signup", function () {
   describe("Creating user", function () {
     it("Should create user and receive jwt", async function () {
-      const payload = { username, email: `${username}@testgymsocialmedia.com`, password: "pass123" };
+      const payload = { username, email: `${username}@testgymsocialmedia.com`, password };
 
       const response = await agent.post("/auth/signup").send(payload);
       jwtCookie = response.headers["set-cookie"][0].split(";")[0].replace("token=", "");
@@ -42,7 +43,7 @@ describe("logout", function () {
 describe("login", function () {
   describe("logging in", function () {
     it("Should log in and receive jwt", async function () {
-      const payload = { authfield: "test21", password: "pass123" };
+      const payload = { authfield: username, password };
       const loginResponse = await agent.post("/auth/login").send(payload);
       expect(loginResponse.status).to.equal(200);
       jwtCookie = loginResponse.headers["set-cookie"][0].split(";")[0].replace("token=", "");

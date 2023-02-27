@@ -8,12 +8,12 @@
 2. Add middleware for secured routes - completed [x]
    1.Create test route to add middleware
    2.Add middleware to selected routes
-3. Create tests
-4. Add checking if user can do certain action - completed [ ]
-   1. Check if given user can send the friend request (senderId is the same as one in token) - completed [ ]
-   2. Check if given user can accept/refuse friend request - (recipientId is the same as one in token) - completed [ ]
-   3. Check if user can create/edit/delete given post (check userId in token) - completed [ ]
-   4. Check if user can edit settings/profile etc. and if can delete user (account deletion) - completed [ ]
+3. Create tests [x]
+4. Add checking if user can do certain action - completed [x]
+   1. Check if given user can send the friend request (senderId is the same as one in token) - completed [x]
+   2. Check if given user can accept/refuse friend request - (recipientId is the same as one in token) - completed [x]
+   3. Check if user can create/edit/delete given post (check userId in token) - completed [x]
+   4. Check if user can edit settings/profile etc. and if can delete user (account deletion) - completed [x]
 5. Add cors options for frontend support
 6. Add 404 handler
 7. Add library for handling pictures/videos

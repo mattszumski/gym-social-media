@@ -1,4 +1,4 @@
-import { createPost, deletePost, editPost, getPostById, getUserPosts, getUserFriendsPosts } from "../services/PostService.js";
+import { createPost, deletePost, editPost, getPostById, getUserPosts, getUserFriendsPosts, checkIfPostBelongsToUser } from "../services/PostService.js";
 
 export const createPostRoute = (req, res) => {
   createPost({ userId: req.user, ...req.body })
@@ -57,8 +57,13 @@ export const getPostForUserDashboardRoute = (req, res) => {
 };
 
 export const editPostRoute = (req, res) => {
-  //TODO: Add checking if user can edit given post
+  const userId = req.user;
   const postId = req.params.postId;
+  const isUserPost = checkIfPostBelongsToUser(userId, postId);
+  if (!isUserPost) {
+    return res.status(403).json({ success: false, reason: "Access denied" });
+  }
+
   editPost(postId, req.body)
     .then((result) => {
       return res.status(200).json(result);
@@ -70,8 +75,12 @@ export const editPostRoute = (req, res) => {
 };
 
 export const deletePostRoute = (req, res) => {
-  //TODO: Add checking if user can delete given post
+  const userId = req.user;
   const postId = req.params.postId;
+  const isUserPost = checkIfPostBelongsToUser(userId, postId);
+  if (!isUserPost) {
+    return res.status(403).json({ success: false, reason: "Access denied" });
+  }
   deletePost(postId)
     .then((result) => {
       return res.status(204).json(result);

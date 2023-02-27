@@ -11,6 +11,17 @@ export const addFriend = async (userId, friendId) => {
   }
 };
 
+const findFriend = (userId, friendId) => {
+  return Friend.findOne({
+    where: {
+      [Op.or]: [
+        { userId: friendId, friendId: userId },
+        { userId, friendId },
+      ],
+    },
+  });
+};
+
 export const getUserFriends = async (userId) => {
   const friends = Friend.findAll({
     where: {
@@ -22,15 +33,7 @@ export const getUserFriends = async (userId) => {
 };
 
 export const removeFriend = async (userId, friendId) => {
-  const friend = await Friend.findOne({
-    where: {
-      [Op.or]: [
-        { userId: friendId, friendId: userId },
-        { userId, friendId },
-      ],
-    },
-  });
-
+  const friend = await findFriend(userId, friendId);
   if (friend) {
     friend.destroy();
   }
@@ -51,4 +54,12 @@ export const removeFriendRequest = async (userId, senderId) => {
   if (friendRequest) {
     friendRequest.destroy();
   }
+};
+
+export const checkIfUsersAreAlreadyFriends = async (userId, friendId) => {
+  const friend = await findFriend(userId, friendId);
+  if (friend) {
+    return true;
+  }
+  return false;
 };

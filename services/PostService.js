@@ -60,3 +60,12 @@ export const deletePost = async (postId) => {
   }
   return Promise.reject("Post not found");
 };
+
+export const checkIfPostBelongsToUser = async (userId, postId) => {
+  const post = await getPostById(postId);
+  if (postId.userId === userId) {
+    return true;
+  }
+
+  return false;
+};

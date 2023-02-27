@@ -56,10 +56,10 @@ User.init(
 );
 
 export const settingsAssociation = User.hasOne(UserSettings);
-UserSettings.belongsTo(User);
+UserSettings.belongsTo(User, { onDelete: "CASCADE" });
 
 export const profileAssociation = User.hasOne(UserProfile);
-UserProfile.belongsTo(User);
+UserProfile.belongsTo(User, { onDelete: "CASCADE" });
 
 User.hasMany(Post);
 Post.belongsTo(User);
