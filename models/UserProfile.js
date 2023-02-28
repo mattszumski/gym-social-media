@@ -27,6 +27,11 @@ UserProfile.init(
       type: DataTypes.STRING(256),
       allowNull: true,
     },
+    //TODO: check how photos/videos will be stored and add proper data to retreive it
+    // profilePhoto: {
+    //   type: DataTypes.STRING(1024),
+    //   allowNull: true,
+    // },
   },
   {
     sequelize,

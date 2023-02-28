@@ -1,9 +1,10 @@
 import Friend from "../models/Friend.js";
 import FriendRequest from "../models/FriendRequest.js";
-import { Op } from "sequelize";
+import User from "../models/User.js";
+import UserProfile from "../models/UserProfile.js";
+import { BelongsTo, Op } from "sequelize";
 
 export const addFriend = async (userId, friendId) => {
-  //TODO: Check if friend is not already added
   try {
     const friend = Friend.create({ userId, friendId });
   } catch (error) {
@@ -47,6 +48,33 @@ export const createFriendRequest = async (userId, recipientId) => {
   }
 };
 
+export const getUserFriendRequests = (userId) => {
+  return FriendRequest.findAll({
+    include: [
+      {
+        model: User,
+        required: true,
+        attributes: ["id", "username"],
+        association: new BelongsTo(FriendRequest, User, { foreignKey: "recipientId", targetKey: "id", constraints: false }),
+      },
+    ],
+    where: { recipientId: userId },
+  });
+};
+export const getFriendRequestsSent = (userId) => {
+  return FriendRequest.findAll({
+    include: [
+      {
+        model: User,
+        required: true,
+        attributes: ["id", "username"],
+        association: new BelongsTo(FriendRequest, User, { foreignKey: "recipientId", targetKey: "id", constraints: false }),
+      },
+    ],
+    where: { userId },
+  });
+};
+
 export const removeFriendRequest = async (userId, senderId) => {
   const friendRequest = await FriendRequest.findOne({
     where: { recipientId: userId, userId: senderId },
@@ -62,4 +90,27 @@ export const checkIfUsersAreAlreadyFriends = async (userId, friendId) => {
     return true;
   }
   return false;
+};
+
+export const getUserFriendsIds = async (userId) => {
+  const userFriends = await getUserFriends(userId);
+  return userFriends.map((friend) => {
+    if (friend.userId === userId) {
+      return friend.friendId;
+    } else {
+      return friend.userId;
+    }
+  });
+};
+
+export const getUserFriendsData = async (userId) => {
+  const userFriendsIds = await getUserFriendsIds(userId);
+  return User.findAll({
+    where: {
+      id: [...userFriendsIds],
+    },
+    attributes: ["id", "username", "fullname", "firstname", "lastname"],
+    include: [{ model: UserProfile, attributes: ["city", "gym", "about"] }],
+    order: [["createdAt", "DESC"]],
+  });
 };

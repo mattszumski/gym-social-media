@@ -1,9 +1,9 @@
 import Post from "../models/Post.js";
-import { getUserFriends } from "./FriendService.js";
+import { getUserFriendsIds } from "./FriendService.js";
 
 export const createPost = async (postData) => {
   try {
-    const post = await Post.create({ ...postData });
+    const post = await Post.create(postData);
     return post;
   } catch (error) {
     Promise.reject(error);
@@ -24,17 +24,8 @@ export const getUserPosts = (userId) => {
 };
 
 export const getUserFriendsPosts = async (userId) => {
-  //get user friends
-  const userFriends = await getUserFriends(userId);
-  const userFriendsIds = userFriends.map((friend) => {
-    if (friend.userId === userId) {
-      return friend.friendId;
-    } else {
-      return friend.userId;
-    }
-  });
+  const userFriendsIds = await getUserFriendsIds(userId);
 
-  //return posts beloning to them
   return Post.findAll({
     where: {
       userId: [...userFriendsIds],

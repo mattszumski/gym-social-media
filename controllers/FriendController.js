@@ -1,4 +1,4 @@
-import { addFriend, getUserFriends, removeFriend, createFriendRequest, removeFriendRequest, checkIfUsersAreAlreadyFriends } from "../services/FriendService.js";
+import { addFriend, getUserFriendsData, removeFriend, createFriendRequest, removeFriendRequest, checkIfUsersAreAlreadyFriends, getUserFriendRequests, getFriendRequestsSent } from "../services/FriendService.js";
 
 export const addFriendRoute = async (req, res) => {
   const userId = req.user;
@@ -25,7 +25,7 @@ export const addFriendRoute = async (req, res) => {
 
 export const getUserFriendsRoute = (req, res) => {
   const userId = req.user;
-  getUserFriends(userId)
+  getUserFriendsData(userId)
     .then((result) => {
       res.status(200).json(result).send();
     })
@@ -38,6 +38,11 @@ export const getUserFriendsRoute = (req, res) => {
 export const removeFriendRoute = (req, res) => {
   const userId = req.user;
   const { friendId } = req.body;
+
+  if (!userId || !friendId) {
+    return res.sendStatus(400);
+  }
+
   removeFriend(userId, friendId)
     .then((result) => {
       res.status(200).json(result).send();
@@ -48,12 +53,18 @@ export const removeFriendRoute = (req, res) => {
     });
 };
 
-export const createFriendRequestRoute = (req, res) => {
+export const createFriendRequestRoute = async (req, res) => {
   const userId = req.user;
   const { senderId } = req.body;
   if (!userId || !senderId) {
     return res.sendStatus(400);
   }
+
+  const alreadyFriends = await checkIfUsersAreAlreadyFriends(userId, senderId);
+  if (alreadyFriends) {
+    return res.status(400).json({ success: false, reason: "Users are already friends" }).send();
+  }
+
   createFriendRequest(userId, senderId)
     .then((result) => {
       res.status(201).json(result).send();
@@ -70,6 +81,30 @@ export const removeFriendRequestRoute = (req, res) => {
     return res.sendStatus(400);
   }
   removeFriendRequest(userId, senderId)
+    .then((result) => {
+      res.status(200).json(result).send();
+    })
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(400);
+    });
+};
+
+export const getUserFriendRequestsRoute = (req, res) => {
+  const userId = req.user;
+  getUserFriendRequests(userId)
+    .then((result) => {
+      res.status(200).json(result).send();
+    })
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(400);
+    });
+};
+
+export const getFriendRequestsSentRoute = (req, res) => {
+  const userId = req.user;
+  getFriendRequestsSent(userId)
     .then((result) => {
       res.status(200).json(result).send();
     })

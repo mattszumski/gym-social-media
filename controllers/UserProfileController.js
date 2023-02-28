@@ -2,7 +2,10 @@ import { createUserProfileData, editUserProfileData, getUserProfileDataByUserId 
 
 export const getUserProfileRoute = (req, res) => {
   const userId = req.params.id;
-
+  if (!userId) {
+    return res.status(400).json({ success: false, reason: "User not found" });
+  }
+  console.log(userId);
   getUserProfileDataByUserId(userId)
     .then((result) => {
       return res.status(200).json(result);
@@ -14,7 +17,11 @@ export const getUserProfileRoute = (req, res) => {
 };
 
 export const editUserProfileRoute = async (req, res) => {
-  getUserProfileDataByUserId(req.params.id)
+  const userId = req.params.id;
+  if (parseInt(userId) !== req.user) {
+    return res.status(403).json({ success: false, reason: "Access denied" });
+  }
+  getUserProfileDataByUserId(userId)
     .then(async (result) => {
       if (!result) {
         return res.status(400).json({ success: false, reason: "Not found" });

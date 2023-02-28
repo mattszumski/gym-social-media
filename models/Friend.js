@@ -23,6 +23,5 @@ Friend.init(
     sequelize,
   }
 );
-//TODO: add validation if both of the users exists in db
 
 export default Friend;

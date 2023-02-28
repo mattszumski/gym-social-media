@@ -39,6 +39,9 @@ export const getAllUsersRoute = (req, res) => {
 
 export const getUserWithIdRoute = (req, res) => {
   const userId = req.params.id;
+  if (!userId) {
+    return res.status(400).json({ success: false, reason: "User not found" });
+  }
   getDbUserWithId(userId)
     .then((result) => {
       if (result) {
@@ -54,7 +57,10 @@ export const getUserWithIdRoute = (req, res) => {
 };
 
 export const getUserDataRoute = (req, res) => {
-  const userId = req.user;
+  const userId = req.params.id;
+  if (parseInt(userId) !== req.user) {
+    return res.status(403).json({ success: false, reason: "Access denied" });
+  }
 
   getUserData(userId)
     .then((result) => {
@@ -68,6 +74,10 @@ export const getUserDataRoute = (req, res) => {
 
 export const editUserWithIdRoute = (req, res) => {
   const userId = req.params.id;
+  if (parseInt(userId) !== req.user) {
+    return res.status(403).json({ success: false, reason: "Access denied" });
+  }
+
   editDbUserWithId(userId, req.body)
     .then((result) => {
       if (result) {
@@ -84,7 +94,11 @@ export const editUserWithIdRoute = (req, res) => {
 
 export const deleteUserWithIdRoute = (req, res) => {
   const userId = req.params.id;
-  //TODO: add deleting userProfile and userSettings along with user
+
+  if (parseInt(userId) !== req.user) {
+    return res.status(403).json({ success: false, reason: "Access denied" });
+  }
+
   deleteDbUserWithId(userId)
     .then((result) => {
       if (result) {

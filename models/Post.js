@@ -13,7 +13,7 @@ Post.init(
       autoIncrement: true,
     },
     text: {
-      type: DataTypes.STRING(),
+      type: DataTypes.STRING(1024),
       allowNull: false,
       validate: {
         notEmpty: { msg: "Please enter text" },

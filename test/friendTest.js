@@ -75,7 +75,7 @@ describe("Friends tests", function () {
     });
   });
 
-  describe("Create and delete friend requests", function () {
+  describe("Create, check and delete friend requests", function () {
     it("Should add a new friend request", async function () {
       const payload = { senderId: testUserId };
       const friendRequestResponse = await agent
@@ -84,6 +84,25 @@ describe("Friends tests", function () {
         .send(payload);
 
       expect(friendRequestResponse.status).to.equal(201);
+    });
+
+    //check received request by user 1
+    it("User 1 should have received friend request", async function () {
+      const receivedRequestResponse = await agent
+        .get("/friend/request")
+        .set("Authorization", "Bearer " + jwtCookie)
+        .send();
+      expect(receivedRequestResponse.status).to.equal(200);
+      expect(receivedRequestResponse.body).to.be.an("array").that.is.not.empty;
+    });
+    //check sent request by user 2
+    it("User 2 should have array of sent friend requests", async function () {
+      const sentRequestResponse = await agent
+        .get("/friend/request/sent")
+        .set("Authorization", "Bearer " + jwtCookie2)
+        .send();
+      expect(sentRequestResponse.status).to.equal(200);
+      expect(sentRequestResponse.body).to.be.an("array").that.is.not.empty;
     });
 
     it("Should delete friend request", async function () {

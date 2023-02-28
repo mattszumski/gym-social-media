@@ -16,9 +16,12 @@
    4. Check if user can edit settings/profile etc. and if can delete user (account deletion) - completed [x]
 5. Add cors options for frontend support - [x]
 6. Add 404 handler - [x]
-7. Add library for handling pictures/videos
-8. Add validations to data
-9. Refactor services - add necessary functions, check if functions should be in other services, add util functions
+7. Add library for handling pictures/videos - added Multer - added to backlog to be done when image will be received from frontend
+8. Add validations to data - [x]
+
+#To check periodically
+
+Refactor services - add necessary functions, check if functions should be in other services, add util functions
 
 #To be added
 
