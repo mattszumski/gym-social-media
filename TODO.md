@@ -14,8 +14,8 @@
    2. Check if given user can accept/refuse friend request - (recipientId is the same as one in token) - completed [x]
    3. Check if user can create/edit/delete given post (check userId in token) - completed [x]
    4. Check if user can edit settings/profile etc. and if can delete user (account deletion) - completed [x]
-5. Add cors options for frontend support
-6. Add 404 handler
+5. Add cors options for frontend support - [x]
+6. Add 404 handler - [x]
 7. Add library for handling pictures/videos
 8. Add validations to data
 9. Refactor services - add necessary functions, check if functions should be in other services, add util functions
