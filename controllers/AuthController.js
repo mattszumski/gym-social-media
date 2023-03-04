@@ -28,7 +28,7 @@ export const singupRoute = async (req, res) => {
   createUserAuthInDb(newUser.id, password)
     .then(async (result) => {
       const token = await authenticateUser(newUser.id, password);
-      return res.cookie("token", token, httpCookieOptions).send();
+      return res.cookie("token", token, httpCookieOptions).json({ userId: newUser.id, username: newUser.username, accessToken: token }).send();
     })
     .catch((error) => {
       console.log(error);
@@ -39,7 +39,7 @@ export const singupRoute = async (req, res) => {
 export const loginRoute = async (req, res) => {
   const { authfield, password } = req.body;
   if (!authfield || !password) {
-    res.status(400).json({ success: false, reason: `Required data is missing` });
+    return res.status(400).json({ success: false, reason: `Required data is missing` });
   }
 
   const user = await getUserIdByEmailOrUsername(authfield);
@@ -49,7 +49,7 @@ export const loginRoute = async (req, res) => {
 
   const authResult = await authenticateUser(user.id, password);
   if (authResult.length > 0) {
-    return res.cookie("token", authResult, httpCookieOptions).json({ userId: user.id }).send();
+    return res.cookie("token", authResult, httpCookieOptions).json({ userId: user.id, username: user.username, accessToken: authResult }).send();
   }
   return res.sendStatus(401);
 };

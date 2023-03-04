@@ -1,4 +1,6 @@
+import { BelongsTo } from "sequelize";
 import Post from "../models/Post.js";
+import User from "../models/User.js";
 import { getUserFriendsIds } from "./FriendService.js";
 
 export const createPost = async (postData) => {
@@ -27,9 +29,17 @@ export const getUserFriendsPosts = async (userId) => {
   const userFriendsIds = await getUserFriendsIds(userId);
 
   return Post.findAll({
+    include: [
+      {
+        model: User,
+        required: true,
+        attributes: ["id", "username", "firstname", "lastname"],
+      },
+    ],
     where: {
-      userId: [...userFriendsIds],
+      userId: [userId, ...userFriendsIds],
     },
+    attributes: ["id", "text", "createdAt"],
     order: [["createdAt", "DESC"]],
   });
 };

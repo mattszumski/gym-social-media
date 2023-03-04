@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import { createUserInDb, getDbUsers, getDbUserWithId, editDbUserWithId, deleteDbUserWithId } from "../services/UserService.js";
+import { createUserInDb, getDbUsers, getDbUserWithId, editDbUserWithId, deleteDbUserWithId, getUserData } from "../services/UserService.js";
 
 //CHECK IF NEEDED
 export const createNewUserRoute = (req, res) => {
@@ -64,11 +64,11 @@ export const getUserDataRoute = (req, res) => {
 
   getUserData(userId)
     .then((result) => {
-      res.status(200).json(result).send();
+      return res.status(200).json(result);
     })
     .catch((error) => {
       console.log(error);
-      res.sendStatus(400);
+      return res.sendStatus(400);
     });
 };
 

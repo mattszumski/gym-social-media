@@ -10,7 +10,7 @@ export const getUserSettingsData = async (id) => {
 };
 
 export const getUserSettingsDataByUserId = async (userId) => {
-  const userSettingsData = await UserSettings.findOne({ userId });
+  const userSettingsData = await UserSettings.findOne({ where: { userId } });
   if (userSettingsData) {
     return userSettingsData;
   }
@@ -18,7 +18,6 @@ export const getUserSettingsDataByUserId = async (userId) => {
 };
 
 export const editUserSettingsData = async (userId, data) => {
-  console.log(data);
   const userSettings = await getUserSettingsDataByUserId(userId);
   if (userSettings) {
     return userSettings.update(data);
