@@ -14,9 +14,34 @@ export const createUserInDb = async (userData) => {
   }
 };
 
-export const getDbUsers = async () => {
-  //TODO:Check filters and apply
-  const users = User.findAll({});
+export const getDbUsers = async (query) => {
+  if (!query) {
+    return Promise.reject();
+  }
+  //TODO: Sanitize input
+  const normalizedQuery = query.toLowerCase();
+  const users = User.findAll({
+    where: {
+      [Op.or]: [
+        {
+          username: {
+            [Op.like]: `%${normalizedQuery}%`,
+          },
+        },
+        {
+          firstname: {
+            [Op.like]: `%${normalizedQuery}%`,
+          },
+        },
+        {
+          lastname: {
+            [Op.like]: `%${normalizedQuery}%`,
+          },
+        },
+      ],
+    },
+    include: [{ model: UserProfile, attributes: ["city", "gym"] }],
+  });
 
   return users;
 };

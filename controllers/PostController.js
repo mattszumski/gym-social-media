@@ -1,6 +1,10 @@
 import { createPost, deletePost, editPost, getPostById, getUserPosts, getUserFriendsPosts, checkIfPostBelongsToUser } from "../services/PostService.js";
 
 export const createPostRoute = (req, res) => {
+  if (!req.body.text) {
+    res.status(400).json({ success: false, reason: "No data" });
+  }
+
   createPost({ userId: req.user, ...req.body })
     .then((result) => {
       res.status(201).json(result);

@@ -27,9 +27,10 @@ export const createNewUserRoute = (req, res) => {
 
 export const getAllUsersRoute = (req, res) => {
   //TODO: To be used only with filters (users looks for other users by search)
-  getDbUsers()
+  const { q } = req.query;
+  getDbUsers(q)
     .then((result) => {
-      res.status(201).json(result);
+      res.status(200).json(result);
     })
     .catch((error) => {
       console.log(error);
@@ -59,7 +60,8 @@ export const getUserWithIdRoute = (req, res) => {
 export const getUserDataRoute = (req, res) => {
   const userId = req.params.id;
   if (parseInt(userId) !== req.user) {
-    return res.status(403).json({ success: false, reason: "Access denied" });
+    //TODO: create new route for userInformation that can be safetly sent to client
+    // return res.status(403).json({ success: false, reason: "Access denied" });
   }
 
   getUserData(userId)
