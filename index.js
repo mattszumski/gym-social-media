@@ -8,6 +8,7 @@ import userRouter from "./routes/UserRouter.js";
 import postRouter from "./routes/PostRouter.js";
 import friendRouter from "./routes/FriendRouter.js";
 import authRouter from "./routes/AuthRoute.js";
+import filesRouter from "./routes/FilesRouter.js";
 import passConfig from "./configs/AuthConfig.js";
 import { corsOptions, credentials } from "./configs/corsOptions.js";
 
@@ -23,10 +24,28 @@ const port = process.env.port || 3500;
 
 passConfig(passport);
 
+//DEV
+//TEST for adding interceptor for static folder
+const fileFolder = express.static("data/uploads");
+app.use("/media", (req, res, next) => {
+  console.log("someone requested photo out");
+  const reqNotify = () => {
+    console.log("someone requested photo");
+  };
+
+  req.on("end", reqNotify);
+
+  fileFolder(req, res, (error) => {
+    req.off("end", reqNotify);
+    next(error);
+  });
+});
+
 app.use("/auth/", authRouter);
 app.use("/user", userRouter);
 app.use("/post", postRouter);
 app.use("/friend", friendRouter);
+app.use("/file", filesRouter);
 app.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "Welcome to gym social media api" });
 });

@@ -77,7 +77,7 @@ export const createFriendRequestRoute = async (req, res) => {
 };
 export const removeFriendRequestRoute = (req, res) => {
   const userId = req.user;
-  const { senderId } = req.body;
+  const { senderId } = req.query;
   if (!userId || !senderId) {
     return res.sendStatus(400);
   }

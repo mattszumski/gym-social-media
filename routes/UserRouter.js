@@ -1,13 +1,8 @@
 import { Router } from "express";
 import passport from "passport";
-import { createNewUserRoute, deleteUserWithIdRoute, editUserWithIdRoute, getAllUsersRoute, getUserDataRoute, getUserWithIdRoute } from "../controllers/UserController.js";
+import { deleteUserWithIdRoute, editUserWithIdRoute, getAllUsersRoute, getUserDataRoute, getUserWithIdRoute } from "../controllers/UserController.js";
 import { editUserProfileRoute, getUserProfileRoute } from "../controllers/UserProfileController.js";
 import { getUserSettingsRoute, editUserSettingsRoute } from "../controllers/UserSettingsController.js";
-import { getUserData } from "../services/UserService.js";
-
-//DEV
-import { getUserAuthDataByLogin, authenticateUser } from "../services/UserAuthService.js";
-import { hashPassword } from "../utils/AuthUtils.js";
 
 const router = Router();
 

@@ -55,7 +55,7 @@ export const getUserFriendRequests = (userId) => {
         model: User,
         required: true,
         attributes: ["id", "username"],
-        association: new BelongsTo(FriendRequest, User, { foreignKey: "recipientId", targetKey: "id", constraints: false }),
+        association: new BelongsTo(FriendRequest, User, { foreignKey: "userId", targetKey: "id", constraints: false }),
       },
     ],
     where: { recipientId: userId },
