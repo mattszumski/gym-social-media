@@ -21,8 +21,8 @@ describe("User test", async function () {
 
   describe("User tests", function () {
     it("Should be more than one user", async function () {
-      const userResponse = await agent.get("/user/");
-      expect(userResponse.body).to.be.length.above(1);
+      const userResponse = await agent.get(`/user?q=${testUsername}`);
+      expect(userResponse.body).to.be.length.above(0);
     });
 
     it("User can get its own data", async function () {

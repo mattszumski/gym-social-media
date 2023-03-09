@@ -7,3 +7,4 @@
 [] Platform: Create setup file which will drop and create tables and input test/default data
 [] Adding videos and photos: create middleware and modify post functions when frontend part will be ready
 [] Create route for accepting friend request - it should add friend and delete current friend request
+[] Check if friend request already exists before creating (avoiding the duplicates)

@@ -77,7 +77,7 @@ describe("Friends tests", function () {
 
   describe("Create, check and delete friend requests", function () {
     it("Should add a new friend request", async function () {
-      const payload = { senderId: testUserId };
+      const payload = { recipientId: testUserId };
       const friendRequestResponse = await agent
         .post("/friend/request")
         .set("Authorization", "Bearer " + jwtCookie2)
@@ -106,11 +106,10 @@ describe("Friends tests", function () {
     });
 
     it("Should delete friend request", async function () {
-      const payload = { senderId: testUserId2 };
       const deleteFriendRequestResponse = await agent
-        .delete("/friend/request")
+        .delete(`/friend/request?senderId=${testUserId2}`)
         .set("Authorization", "Bearer " + jwtCookie)
-        .send(payload);
+        .send();
 
       expect(deleteFriendRequestResponse.status).to.equal(200);
     });

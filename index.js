@@ -3,14 +3,15 @@ import dotenv from "dotenv";
 import passport from "passport";
 import cors from "cors";
 import dbConnection from "./configs/dbConnection.js";
-import { setupDb } from "./services/dbService.js";
 import userRouter from "./routes/UserRouter.js";
 import postRouter from "./routes/PostRouter.js";
 import friendRouter from "./routes/FriendRouter.js";
 import authRouter from "./routes/AuthRoute.js";
-import filesRouter from "./routes/FilesRouter.js";
+import filesRouter from "./routes/FileRouter.js";
 import passConfig from "./configs/AuthConfig.js";
 import { corsOptions, credentials } from "./configs/corsOptions.js";
+
+import basicSetup from "./setup.js";
 
 const app = express();
 
@@ -26,7 +27,7 @@ passConfig(passport);
 
 //DEV
 //TEST for adding interceptor for static folder
-const fileFolder = express.static("data/uploads");
+const fileFolder = express.static("public/data/uploads");
 app.use("/media", (req, res, next) => {
   console.log("someone requested photo out");
   const reqNotify = () => {
@@ -63,8 +64,9 @@ dbConnection
     console.error(`DB connection error. Error: ${error}`);
   });
 
-//dev function for rebuilding (force sync) db after changes
-// setupDb();
+//uncomment to run basic setup
+//TODO:  move it pernamently to setup file
+// basicSetup();
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
