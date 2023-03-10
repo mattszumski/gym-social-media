@@ -65,3 +65,15 @@ export const createLogoutToken = () => {
 
   return signJWT(data);
 };
+
+export const deleteUserAuthData = async (userId) => {
+  const userAuth = await UserAuth.findOne({
+    where: {
+      userId,
+    },
+  });
+
+  if (userAuth) {
+    userAuth.destroy();
+  }
+};

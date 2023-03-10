@@ -4,6 +4,7 @@ import request from "supertest";
 const localAddress = "http://localhost:4000";
 const agent = request.agent(localAddress);
 let jwtCookie = "";
+let userId = "";
 const randomIdForTest = Math.floor(Math.random() * 100000 + 1);
 const username = `test${randomIdForTest}`;
 const password = `pass123`;
@@ -47,6 +48,7 @@ describe("login", function () {
       const loginResponse = await agent.post("/auth/login").send(payload);
       expect(loginResponse.status).to.equal(200);
       jwtCookie = loginResponse.headers["set-cookie"][0].split(";")[0].replace("token=", "");
+      userId = loginResponse.body.userId;
     });
 
     it("Should be able to access protected route", async function () {
@@ -58,5 +60,16 @@ describe("login", function () {
 
       expect(protectedRouteResponse.status).to.equal(200);
     });
+  });
+});
+
+describe("cleanup", function () {
+  it("should delete user and its data", async function () {
+    const deleteRouteResponse = await agent
+      .delete(`/user/${userId}`)
+      .set("Authorization", "Bearer " + jwtCookie)
+      .send();
+
+    expect(deleteRouteResponse.status).to.equal(200);
   });
 });

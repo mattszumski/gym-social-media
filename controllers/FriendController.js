@@ -1,4 +1,16 @@
-import { addFriend, getUserFriendsData, removeFriend, createFriendRequest, removeFriendRequest, checkIfUsersAreAlreadyFriends, getUserFriendRequests, getFriendRequestsSent } from "../services/FriendService.js";
+import {
+  addFriend,
+  getUserFriendsData,
+  removeFriend,
+  createFriendRequest,
+  removeFriendRequest,
+  checkIfUsersAreAlreadyFriends,
+  getUserFriendRequests,
+  getFriendRequestsSent,
+  cancelSentFriendRequest,
+  checkIfFriendRequestBetweenUsersExists,
+  acceptFriendRequest,
+} from "../services/FriendService.js";
 
 export const addFriendRoute = async (req, res) => {
   const userId = req.user;
@@ -63,7 +75,12 @@ export const createFriendRequestRoute = async (req, res) => {
 
   const alreadyFriends = await checkIfUsersAreAlreadyFriends(userId, recipientId);
   if (alreadyFriends) {
-    return res.status(400).json({ success: false, reason: "Users are already friends" }).send();
+    return res.status(400).json({ success: false, reason: "Users are already friends." }).send();
+  }
+
+  const requestAlreadyExists = await checkIfFriendRequestBetweenUsersExists(userId, recipientId);
+  if (requestAlreadyExists) {
+    return res.status(400).json({ success: false, reason: "Request already exists between users." }).send();
   }
 
   createFriendRequest(userId, recipientId)
@@ -112,5 +129,29 @@ export const getFriendRequestsSentRoute = (req, res) => {
     .catch((error) => {
       console.log(error);
       res.sendStatus(400);
+    });
+};
+
+export const acceptFriendRequestRoute = (req, res) => {
+  const userId = req.user;
+  const { recipientId } = req.body;
+  acceptFriendRequest(userId, recipientId)
+    .then((result) => {
+      return res.sendStatus(200);
+    })
+    .catch((error) => {
+      return res.sendStatus(400);
+    });
+};
+
+export const cancelFriendRequestRoute = (req, res) => {
+  const userId = req.user;
+  const { recipientId } = req.body;
+  cancelSentFriendRequest(userId, recipientId)
+    .then((result) => {
+      return res.sendStatus(200);
+    })
+    .catch((error) => {
+      return res.sendStatus(400);
     });
 };

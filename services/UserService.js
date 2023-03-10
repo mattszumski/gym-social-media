@@ -2,7 +2,7 @@ import { Op, fn, col, where } from "sequelize";
 import User, { profileAssociation, settingsAssociation } from "../models/User.js";
 import UserProfile from "../models/UserProfile.js";
 import UserSettings from "../models/UserSettings.js";
-import { getUserIdByEmailOrUsername } from "./UserAuthService.js";
+import { deleteUserAuthData } from "./UserAuthService.js";
 
 export const createUserInDb = async (userData) => {
   try {
@@ -75,8 +75,10 @@ export const deleteDbUserWithId = async (id) => {
   const user = await getDbUserWithId(id);
   if (user) {
     const result = await user.destroy();
+    deleteUserAuthData(user.id);
     return result;
   }
+  //TODO: delete user auth
 
   return null;
 };

@@ -114,3 +114,63 @@ export const getUserFriendsData = async (userId) => {
     order: [["createdAt", "DESC"]],
   });
 };
+
+export const acceptFriendRequest = async (userId, recipientId) => {
+  return addFriend(userId, recipientId)
+    .then(async (result) => {
+      const friendRequest = await FriendRequest.findOne({
+        where: { recipientId: userId, userId: recipientId },
+      });
+
+      if (friendRequest) {
+        friendRequest.destroy();
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const cancelSentFriendRequest = async (userId, recipientId) => {
+  const friendRequest = await FriendRequest.findOne({
+    where: { userId, recipientId },
+  });
+  if (friendRequest) {
+    friendRequest.destroy();
+  }
+};
+
+export const checkIfFriendRequestBetweenUsersExists = async (userId, recipientId) => {
+  let requestSent = checkIfUserSentFriendRequestToOther(userId, recipientId);
+  let requestReceived = checkIfUserReceivedFriendRequestFromOther(userId, recipientId);
+
+  return requestSent || requestReceived;
+};
+
+export const checkIfUserSentFriendRequestToOther = async (userId, recipientId) => {
+  const result = await FriendRequest.findOne({
+    where: {
+      userId,
+      recipientId,
+    },
+  });
+
+  if (result) {
+    return true;
+  }
+  return false;
+};
+
+export const checkIfUserReceivedFriendRequestFromOther = async (userId, recipientId) => {
+  const result = await FriendRequest.findOne({
+    where: {
+      recipientId: userId,
+      userId: recipientId,
+    },
+  });
+
+  if (result) {
+    return true;
+  }
+  return false;
+};
