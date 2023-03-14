@@ -57,7 +57,7 @@ export const getUserData = async (userId) => {
     where: {
       id: userId,
     },
-    include: [{ model: UserProfile, attributes: ["city", "gym", "about"] }, UserSettings],
+    include: [{ model: UserProfile, attributes: ["city", "gym", "about", "profilePhotoId"] }, UserSettings],
   });
 };
 

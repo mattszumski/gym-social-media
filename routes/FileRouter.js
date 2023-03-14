@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import multer from "multer";
-import { uploadFilesRoute, getPhotoPathWithIdRoute, getUserPhotosRoute } from "../controllers/FilesController.js";
+import { uploadFilesRoute, getPhotoPathWithIdRoute, getUserPhotosRoute, getUserProfilePhotoRoute, getResizedUserProfilePhotoRoute } from "../controllers/FilesController.js";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -21,5 +21,7 @@ const router = Router();
 router.route("/").post(passport.authenticate("jwt", { session: false }), uploads.array("files"), uploadFilesRoute);
 router.route("/photo/:id").get(getPhotoPathWithIdRoute);
 router.route("/userPhotos/:userId").get(getUserPhotosRoute);
+router.route("/userPhotos/:userId/profile").get(getUserProfilePhotoRoute);
+router.route("/userPhotos/:userId/profile/:size").get(getResizedUserProfilePhotoRoute);
 
 export default router;

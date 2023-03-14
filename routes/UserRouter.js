@@ -16,7 +16,6 @@ router
   .route("/profile/:id")
   .get(getUserProfileRoute)
   .patch(passport.authenticate("jwt", { session: false }), editUserProfileRoute);
-//TODO
 router
   .route("/settings/:id")
   .get(passport.authenticate("jwt", { session: false }), getUserSettingsRoute)

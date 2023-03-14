@@ -32,3 +32,4 @@ Refactor services - add necessary functions, check if functions should be in oth
 
 1. Caching (Redis?)
 2. Logging
+3. Cron to cleanup database (userProfiles and UserSettings)

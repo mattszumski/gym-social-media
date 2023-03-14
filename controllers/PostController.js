@@ -2,15 +2,17 @@ import { createPost, deletePost, editPost, getPostById, getUserPosts, getUserFri
 
 export const createPostRoute = (req, res) => {
   if (!req.body.text) {
-    res.status(400).json({ success: false, reason: "No data" });
+    return res.status(400).json({ success: false, reason: "No data" });
   }
 
   createPost({ userId: req.user, ...req.body })
     .then((result) => {
-      res.status(201).json(result);
+      if (result) {
+        return res.status(201).json(result);
+      }
     })
     .catch((error) => {
-      res.status(400).json(error);
+      return res.status(400).json(error);
     });
 };
 

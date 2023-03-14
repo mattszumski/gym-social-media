@@ -33,9 +33,14 @@ File.init(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
-    forGallery: {
+    gallery: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
+    },
+    //If id is other than 0, photo belongs to the post
+    postId: {
+      type: DataTypes.BIGINT,
+      defaultValue: 0,
     },
     path: {
       type: DataTypes.VIRTUAL,

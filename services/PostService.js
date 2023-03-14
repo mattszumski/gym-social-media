@@ -5,8 +5,7 @@ import { getUserFriendsIds } from "./FriendService.js";
 
 export const createPost = async (postData) => {
   try {
-    const post = await Post.create(postData);
-    return post;
+    return Post.create(postData);
   } catch (error) {
     Promise.reject(error);
   }
