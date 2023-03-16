@@ -1,5 +1,7 @@
 import { authenticateUser, getUserIdByEmailOrUsername, createUserAuthInDb, createLogoutToken } from "../services/UserAuthService.js";
 import { checkIfUserExistsInDb, createUserInDb } from "../services/UserService.js";
+import { getBearerTokenFromReq } from "../utils/AuthUtils.js";
+import { addToBlacklist } from "./../services/TokenService.js";
 
 const httpCookieOptions = {
   maxAge: 60 * 60 * 24 * 1000,
@@ -55,7 +57,7 @@ export const loginRoute = async (req, res) => {
 };
 
 export const logoutRoute = (req, res) => {
-  //TODO test in real environment
+  addToBlacklist(getBearerTokenFromReq(req));
   const logoutToken = createLogoutToken();
   return res.cookie("token", logoutToken, { maxAge: 0, secure: false, httpOnly: true }).send();
 };

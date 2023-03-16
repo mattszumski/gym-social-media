@@ -1,9 +1,6 @@
 import { pbkdf2Sync, randomBytes } from "crypto";
 import jwt from "jsonwebtoken";
 
-// function to create JWT token
-// function to
-
 export const validatePassword = (password, hash, salt) => {
   const hashedPassword = pbkdf2Sync(password, salt, 32000, 64, "sha512").toString("hex");
   return hashedPassword === hash;
@@ -27,4 +24,9 @@ export const signJWT = (userData) => {
   };
 
   return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, options);
+};
+
+export const getBearerTokenFromReq = (req) => {
+  let tokenFromHeader = req.headers?.authorization;
+  return tokenFromHeader && tokenFromHeader.split(" ").at(1);
 };

@@ -39,7 +39,19 @@ export const getUserFriendsRoute = (req, res) => {
   const userId = req.user;
   getUserFriendsData(userId)
     .then((result) => {
-      res.status(200).json(result).send();
+      return res.status(200).json(result);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(400);
+    });
+};
+
+export const getFriendsByUserIdRoute = (req, res) => {
+  const { userId } = req.params;
+  getUserFriendsData(userId)
+    .then((result) => {
+      return res.status(200).json(result);
     })
     .catch((error) => {
       console.log(error);

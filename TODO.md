@@ -1,4 +1,4 @@
-# when creating a user check if username/email like this exists in database -> both username and email should be checked in case insensitive manner
+#TODOs
 
 1. Finish auth routes
    1. Finish signup route - completed [x]

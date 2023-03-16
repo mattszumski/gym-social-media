@@ -2,6 +2,7 @@ import Friend from "../models/Friend.js";
 import FriendRequest from "../models/FriendRequest.js";
 import User from "../models/User.js";
 import UserProfile from "../models/UserProfile.js";
+import File from "../models/File.js";
 import { BelongsTo, Op } from "sequelize";
 
 export const addFriend = async (userId, friendId) => {
@@ -95,7 +96,7 @@ export const checkIfUsersAreAlreadyFriends = async (userId, friendId) => {
 export const getUserFriendsIds = async (userId) => {
   const userFriends = await getUserFriends(userId);
   return userFriends.map((friend) => {
-    if (friend.userId === userId) {
+    if (friend.userId == userId) {
       return friend.friendId;
     } else {
       return friend.userId;
@@ -105,12 +106,27 @@ export const getUserFriendsIds = async (userId) => {
 
 export const getUserFriendsData = async (userId) => {
   const userFriendsIds = await getUserFriendsIds(userId);
+  console.log(userId);
+  console.log(userFriendsIds);
   return User.findAll({
     where: {
       id: [...userFriendsIds],
     },
     attributes: ["id", "username", "fullname", "firstname", "lastname"],
-    include: [{ model: UserProfile, attributes: ["city", "gym", "about"] }],
+    include: [
+      {
+        model: UserProfile,
+        attributes: ["city", "gym", "about"],
+        include: [
+          {
+            model: File,
+            required: false,
+            attributes: ["storedName", "path"],
+            association: new BelongsTo(UserProfile, File, { foreignKey: "profilePhotoId", targetKey: "id", constraints: false }),
+          },
+        ],
+      },
+    ],
     order: [["createdAt", "DESC"]],
   });
 };

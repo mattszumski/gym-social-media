@@ -1,6 +1,8 @@
 import { BelongsTo } from "sequelize";
+import File from "../models/File.js";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
+import UserProfile from "../models/UserProfile.js";
 import { getUserFriendsIds } from "./FriendService.js";
 
 export const createPost = async (postData) => {
@@ -18,9 +20,32 @@ export const getPostById = (postId) => {
 
 export const getUserPosts = (userId) => {
   return Post.findAll({
+    include: [
+      {
+        model: User,
+        required: true,
+        attributes: ["id", "username", "firstname", "lastname"],
+        include: [
+          {
+            model: UserProfile,
+            required: true,
+            attributes: ["profilePhotoId"],
+            include: [
+              {
+                model: File,
+                required: false,
+                attributes: ["storedName", "path"],
+                association: new BelongsTo(UserProfile, File, { foreignKey: "profilePhotoId", targetKey: "id", constraints: false }),
+              },
+            ],
+          },
+        ],
+      },
+    ],
     where: {
       userId,
     },
+    order: [["createdAt", "DESC"]],
   });
 };
 
@@ -33,6 +58,21 @@ export const getUserFriendsPosts = async (userId) => {
         model: User,
         required: true,
         attributes: ["id", "username", "firstname", "lastname"],
+        include: [
+          {
+            model: UserProfile,
+            required: true,
+            attributes: ["profilePhotoId"],
+            include: [
+              {
+                model: File,
+                required: false,
+                attributes: ["storedName", "path"],
+                association: new BelongsTo(UserProfile, File, { foreignKey: "profilePhotoId", targetKey: "id", constraints: false }),
+              },
+            ],
+          },
+        ],
       },
     ],
     where: {
