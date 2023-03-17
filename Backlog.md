@@ -13,4 +13,4 @@
 [] Improve token auth: add refresh token | add token blacklist | add token field in user?
 
 To check if still applicable:
-[]when creating a user check if username/email like this exists in database -> both username and email should be checked in case insensitive manner
+[x] (Completed previously) when creating a user check if username/email like this exists in database -> both username and email should be checked in case insensitive manner

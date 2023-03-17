@@ -14,9 +14,11 @@ export const hashPassword = (password) => {
 };
 
 export const signJWT = (userData) => {
+  //Random number added to distinguish the tokens send in the same second (failing tests)
   const payload = {
     userId: userData.userId,
     username: userData.username,
+    rand: Math.round(Math.random() * 10000),
   };
 
   const options = {

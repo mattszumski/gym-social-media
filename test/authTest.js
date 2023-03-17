@@ -43,9 +43,25 @@ describe("logout", function () {
 
 describe("login", function () {
   describe("logging in", function () {
+    it("Should not log in because of empty authfield", async function () {
+      const payload = { authfield: "", password };
+      const loginResponse = await request.agent(localAddress).post("/auth/login").send(payload);
+      expect(loginResponse.status).to.equal(400);
+
+      userId = loginResponse.body.userId;
+    });
+
+    it("Should not log in because of wrong password", async function () {
+      const payload = { authfield: username, password: "ThisIsWrongPassword4Sure" };
+      const loginResponse = await request.agent(localAddress).post("/auth/login").send(payload);
+      expect(loginResponse.status).to.equal(401);
+
+      userId = loginResponse.body.userId;
+    });
+
     it("Should log in and receive jwt", async function () {
       const payload = { authfield: username, password };
-      const loginResponse = await agent.post("/auth/login").send(payload);
+      const loginResponse = await request.agent(localAddress).post("/auth/login").send(payload);
       expect(loginResponse.status).to.equal(200);
       jwtCookie = loginResponse.headers["set-cookie"][0].split(";")[0].replace("token=", "");
       userId = loginResponse.body.userId;
