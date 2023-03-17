@@ -12,6 +12,7 @@ import passConfig from "./configs/AuthConfig.js";
 import { corsOptions, credentials } from "./configs/corsOptions.js";
 
 import basicSetup from "./setup.js";
+import logReqest from "./middlewares/logRequest.js";
 
 const app = express();
 
@@ -41,6 +42,8 @@ app.use("/media", (req, res, next) => {
     next(error);
   });
 });
+
+app.use(logReqest);
 
 app.use("/auth/", authRouter);
 app.use("/user", userRouter);
