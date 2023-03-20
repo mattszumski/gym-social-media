@@ -3,7 +3,7 @@ import File from "../models/File.js";
 import UserProfile from "../models/UserProfile.js";
 import { BelongsTo } from "sequelize";
 
-export const addUploadedFilesData = (ownerId, filesArray) => {
+export const addUploadedFilesData = (ownerId, filesArray, postId = 0) => {
   const filesData = filesArray.map((val) => {
     return {
       originalName: val.originalname,
@@ -12,6 +12,7 @@ export const addUploadedFilesData = (ownerId, filesArray) => {
       mimetype: val.mimetype,
       encoding: val.encoding,
       ownerId,
+      postId,
     };
   });
 

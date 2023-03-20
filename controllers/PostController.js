@@ -1,13 +1,19 @@
 import { createPost, deletePost, editPost, getPostById, getUserPosts, getUserFriendsPosts, checkIfPostBelongsToUser } from "../services/PostService.js";
+import { insertPostPhotos } from "./FilesController.js";
 
 export const createPostRoute = (req, res) => {
-  if (!req.body.text) {
+  if (!req?.body?.text && !req?.files?.length) {
     return res.status(400).json({ success: false, reason: "No data" });
   }
+  const text = req?.body?.text || "";
 
-  createPost({ userId: req.user, ...req.body })
+  createPost({ userId: req.user, text })
     .then((result) => {
       if (result) {
+        if (req?.files?.length) {
+          insertPostPhotos(req.user, result.id, req.files);
+        }
+
         return res.status(201).json(result);
       }
     })

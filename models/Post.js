@@ -1,6 +1,5 @@
 import sequelize from "../configs/dbConnection.js";
 import { DataTypes, Model } from "sequelize";
-import User from "./User.js";
 import PostComments from "./PostComments.js";
 
 class Post extends Model {}
@@ -14,11 +13,7 @@ Post.init(
     },
     text: {
       type: DataTypes.STRING(1024),
-      allowNull: false,
-      validate: {
-        notEmpty: { msg: "Please enter text" },
-        notNull: { msg: "Please enter text" },
-      },
+      allowNull: true,
     },
     //TODO: check how photos/videos will be stored and add proper data to retreive it
     media: {

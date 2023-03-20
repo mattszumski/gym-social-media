@@ -86,3 +86,8 @@ export const getResizedUserProfilePhotoRoute = (req, res) => {
       return res.sendStatus(400);
     });
 };
+
+export const insertPostPhotos = (userId, postId, photos) => {
+  createPhotoThumbnails(photos);
+  return addUploadedFilesData(userId, photos, postId);
+};

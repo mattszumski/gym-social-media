@@ -1,4 +1,4 @@
-import { BelongsTo } from "sequelize";
+import { BelongsTo, HasMany } from "sequelize";
 import File from "../models/File.js";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
@@ -73,6 +73,12 @@ export const getUserFriendsPosts = async (userId) => {
             ],
           },
         ],
+      },
+      {
+        model: File,
+        required: false,
+        attributes: ["id", "storedName", "path"],
+        association: new HasMany(Post, File, { foreignKey: "postId", targetKey: "id", constraints: false }),
       },
     ],
     where: {

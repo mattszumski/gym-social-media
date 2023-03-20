@@ -1,19 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
-import multer from "multer";
 import { uploadFilesRoute, getPhotoPathWithIdRoute, getUserPhotosRoute, getUserProfilePhotoRoute, getResizedUserProfilePhotoRoute } from "../controllers/FilesController.js";
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/data/uploads/");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname);
-  },
-});
-
-const uploads = multer({ storage: storage });
+import uploads from "../configs/MulterConfig.js";
 
 const router = Router();
 

@@ -21,6 +21,7 @@ dotenv.config();
 app.use(credentials);
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const port = process.env.port || 3500;
 
