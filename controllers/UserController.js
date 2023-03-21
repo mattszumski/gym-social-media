@@ -1,5 +1,7 @@
 import { validationResult } from "express-validator";
+import { addUploadedFilesData, createPhotoThumbnails } from "../services/FileService.js";
 import { createUserInDb, getDbUsers, getDbUserWithId, editDbUserWithId, deleteDbUserWithId, getUserData } from "../services/UserService.js";
+import { setUserProfilePicture } from "../services/UserProfileService.js";
 
 //CHECK IF NEEDED
 export const createNewUserRoute = (req, res) => {
@@ -113,4 +115,23 @@ export const deleteUserWithIdRoute = (req, res) => {
       console.log(error);
       res.sendStatus(500);
     });
+};
+
+export const uploadProfilePictureRoute = async (req, res) => {
+  const userId = req.user;
+  console.log(req.files);
+  if (req.files.length == 0) {
+    return res.sendStatus(400);
+  }
+
+  const file = req.files.at(0);
+  //TODO (Backlog) : Create more sophisticated method to check if the uploaded file type is accepted
+  if (file.mimetype.substring(0, 6).valueOf() !== "image/".valueOf()) {
+    return res.sendStatus(400);
+  }
+  createPhotoThumbnails(req.files);
+  const fileData = await addUploadedFilesData(userId, req.files);
+  setUserProfilePicture(userId, fileData.at(0).id);
+  //TODO: Check for errors
+  res.sendStatus(200);
 };

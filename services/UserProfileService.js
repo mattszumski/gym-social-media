@@ -33,3 +33,15 @@ export const deleteUserProfileData = async (id, data) => {
   }
   return null;
 };
+
+export const setUserProfilePicture = (userId, fileId) => {
+  editUserProfileData(userId, { profilePhotoId: fileId })
+    .then((result) => {
+      if (!result) {
+        throw `User profile doesn't exists for userId=${userId}`;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};

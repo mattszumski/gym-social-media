@@ -1,6 +1,5 @@
 import sequelize from "../configs/dbConnection.js";
 import { DataTypes, Model } from "sequelize";
-import User from "./User.js";
 
 class UserProfile extends Model {}
 
