@@ -11,22 +11,13 @@ PostComments.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    owner_id: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
-    },
-    post_id: {
+    userId: {
       type: DataTypes.BIGINT,
       allowNull: false,
     },
     text: {
       type: DataTypes.STRING(),
       allowNull: false,
-    },
-    //TODO: check how photos/videos will be stored and add proper data to retreive it
-    media: {
-      type: DataTypes.STRING(1024),
-      allowNull: true,
     },
     edited: {
       type: DataTypes.BOOLEAN,

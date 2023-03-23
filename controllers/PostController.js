@@ -1,4 +1,4 @@
-import { createPost, deletePost, editPost, getPostById, getUserPosts, getUserFriendsPosts, checkIfPostBelongsToUser } from "../services/PostService.js";
+import { createPost, deletePost, editPost, getPostById, getUserPosts, getUserFriendsPosts, checkIfPostBelongsToUser, addPostComment, getPostComments } from "../services/PostService.js";
 import { insertPostPhotos } from "./FilesController.js";
 
 export const createPostRoute = (req, res) => {
@@ -102,3 +102,40 @@ export const deletePostRoute = (req, res) => {
       res.sendStatus(400);
     });
 };
+
+export const addPostCommentRoute = (req, res) => {
+  const userId = req.user;
+  const { postId, text } = req.body;
+  if (!postId || !text) {
+    return res.sendStatus(400);
+  }
+
+  addPostComment(userId, postId, text)
+    .then((result) => {
+      return res.status(201).json(result);
+    })
+    .catch((error) => {
+      console.log(error);
+      return res.status(400).json(error);
+    });
+};
+
+export const getPostCommentsRoute = (req, res) => {
+  const { postId } = req.query;
+
+  if (!postId) {
+    return res.sendStatus(400);
+  }
+
+  getPostComments(postId)
+    .then((result) => {
+      return res.status(200).json(result);
+    })
+    .catch((error) => {
+      console.log(error);
+      return res.status(400).json(error);
+    });
+};
+
+export const editPostCommentRoute = (req, res) => {};
+export const deletePostCommentRoute = (req, res) => {};
