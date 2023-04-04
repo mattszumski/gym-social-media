@@ -9,9 +9,10 @@ class RequestLogger extends EventEmmiter {}
 const logger = new RequestLogger();
 
 logger.on("logIncoming", (dataObject) => {
-  const { origin, host, originalUrl } = dataObject;
+  console.log(dataObject);
+  const { origin, host, originalUrl, method } = dataObject;
   const timestamp = format(new Date(), "dd-MM-yyyy\tHH:mm");
-  const logMessage = `${timestamp}\t${origin}\t${host}\t${originalUrl} \n`;
+  const logMessage = `${timestamp}\t${method}\t${origin}\t${host}\t${originalUrl} \n`;
   console.log(logMessage);
 
   const dateLogsPath = `./logs/${format(new Date(), "dd-MM-yyyy")}`;
