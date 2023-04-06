@@ -4,7 +4,14 @@ import UserSettings from "./UserSettings.js";
 import UserProfile from "./UserProfile.js";
 import Post from "./Post.js";
 
-class User extends Model {}
+class User extends Model {
+  declare id: number;
+  declare email: string;
+  declare username: string;
+  declare firstname?: string;
+  declare lastname?: string;
+  declare fullname?: string;
+}
 
 User.init(
   {

@@ -17,9 +17,7 @@ logger.on("logIncoming", (dataObject) => {
 
   const dateLogsPath = `./logs/${format(new Date(), "dd-MM-yyyy")}`;
   if (!fs.existsSync(dateLogsPath)) {
-    fs.mkdirSync(dateLogsPath, { recursive: true }, (err) => {
-      console.log(err);
-    });
+    fs.mkdirSync(dateLogsPath, { recursive: true });
   }
   fs.promises.appendFile(`${dateLogsPath}/incomingReq.log`, logMessage);
 });

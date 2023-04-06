@@ -1,7 +1,8 @@
 import { authenticateUser, getUserIdByEmailOrUsername, createUserAuthInDb, createLogoutToken } from "../services/UserAuthService.js";
 import { checkIfUserExistsInDb, createUserInDb } from "../services/UserService.js";
 import { getBearerTokenFromReq } from "../utils/AuthUtils.js";
-import { addToBlacklist } from "./../services/TokenService.js";
+import { addToBlacklist } from "../services/TokenService.js";
+import { Request, Response } from "express";
 
 const httpCookieOptions = {
   maxAge: 60 * 60 * 24 * 1000,
@@ -9,7 +10,7 @@ const httpCookieOptions = {
   httpOnly: true,
 };
 
-export const singupRoute = async (req, res) => {
+export const singupRoute = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
     return res.status(400).json({ success: false, reason: "Required data is missing" });
@@ -38,7 +39,7 @@ export const singupRoute = async (req, res) => {
     });
 };
 
-export const loginRoute = async (req, res) => {
+export const loginRoute = async (req: Request, res: Response) => {
   const { authfield, password } = req.body;
   if (!authfield || !password) {
     return res.status(400).json({ success: false, reason: `Required data is missing` });
@@ -56,7 +57,7 @@ export const loginRoute = async (req, res) => {
   return res.sendStatus(401);
 };
 
-export const logoutRoute = (req, res) => {
+export const logoutRoute = (req: Request, res: Response) => {
   addToBlacklist(getBearerTokenFromReq(req));
   const logoutToken = createLogoutToken();
   return res.cookie("token", logoutToken, { maxAge: 0, secure: false, httpOnly: true }).send();

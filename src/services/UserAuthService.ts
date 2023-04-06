@@ -3,7 +3,7 @@ import User from "../models/User.js";
 import { Op, fn, col, where } from "sequelize";
 import { hashPassword, signJWT, validatePassword } from "../utils/AuthUtils.js";
 
-export const createUserAuthInDb = async (userId, password) => {
+export const createUserAuthInDb = async (userId: number, password: string) => {
   const { salt, hashedPassword } = hashPassword(password);
   try {
     return UserAuth.create({ userId, password: hashedPassword, salt });
@@ -12,7 +12,7 @@ export const createUserAuthInDb = async (userId, password) => {
   }
 };
 
-export const getUserIdByEmailOrUsername = (input) => {
+export const getUserIdByEmailOrUsername = (input: string) => {
   const normalizedInput = input.toLowerCase();
   return User.findOne({
     where: {
@@ -21,21 +21,21 @@ export const getUserIdByEmailOrUsername = (input) => {
   });
 };
 
-export const getUserAuthDataByLogin = async (userLogin) => {
-  //TODO
-  const user = await getUserIdByEmailOrUsername(userLogin);
-  if (!user) {
-    return null;
-  } else {
-    return UserAuth.findOne({
-      where: {
-        userId: userLogin.id,
-      },
-    });
-  }
-};
+// export const getUserAuthDataByLogin = async (userLogin: string) => {
+//   //TODO
+//   const user = await getUserIdByEmailOrUsername(userLogin);
+//   if (!user) {
+//     return null;
+//   } else {
+//     return UserAuth.findOne({
+//       where: {
+//         userId: user.id,
+//       },
+//     });
+//   }
+// };
 
-export const getUserAuthDataByUserId = async (userId) => {
+export const getUserAuthDataByUserId = async (userId: number) => {
   return UserAuth.findOne({
     where: {
       userId,
@@ -43,9 +43,12 @@ export const getUserAuthDataByUserId = async (userId) => {
   });
 };
 
-export const authenticateUser = async (userId, password) => {
+export const authenticateUser = async (userId: number, password: string) => {
   //get data from request
   const authData = await getUserAuthDataByUserId(userId);
+  if (!authData) {
+    return "";
+  }
 
   // check against db data
   const passwordValidated = validatePassword(password, authData.password, authData.salt);
@@ -66,7 +69,7 @@ export const createLogoutToken = () => {
   return signJWT(data);
 };
 
-export const deleteUserAuthData = async (userId) => {
+export const deleteUserAuthData = async (userId: number) => {
   const userAuth = await UserAuth.findOne({
     where: {
       userId,

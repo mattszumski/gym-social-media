@@ -1,7 +1,12 @@
 import sequelize from "../configs/dbConnection.js";
 import { DataTypes, Model } from "sequelize";
 
-class UserAuth extends Model {}
+class UserAuth extends Model {
+  declare id?: number;
+  declare userId: number;
+  declare password: string;
+  declare salt: string;
+}
 
 UserAuth.init(
   {

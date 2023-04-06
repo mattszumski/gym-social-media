@@ -38,9 +38,9 @@ app.use("/media", (req, res, next) => {
 
   req.on("end", reqNotify);
 
-  fileFolder(req, res, (error) => {
+  fileFolder(req, res, () => {
     req.off("end", reqNotify);
-    next(error);
+    next();
   });
 });
 
