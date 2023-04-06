@@ -2,9 +2,11 @@ import { validationResult } from "express-validator";
 import { addUploadedFilesData, createPhotoThumbnails } from "../services/FileService.js";
 import { createUserInDb, getDbUsers, getDbUserWithId, editDbUserWithId, deleteDbUserWithId, getUserData } from "../services/UserService.js";
 import { setUserProfilePicture } from "../services/UserProfileService.js";
+import { Request, Response } from "express";
+import ExtendedIncomingFile from "../utils/types/ExtendedIncomingFile.js";
 
 //CHECK IF NEEDED
-export const createNewUserRoute = (req, res) => {
+export const createNewUserRoute = (req: Request, res: Response) => {
   //validate data
   const validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
@@ -27,7 +29,7 @@ export const createNewUserRoute = (req, res) => {
   //TODO: ERROR_HANDLING, check if user has been successfully created
 };
 
-export const getAllUsersRoute = (req, res) => {
+export const getAllUsersRoute = (req: Request, res: Response) => {
   //TODO: To be used only with filters (users looks for other users by search)
   const { q } = req.query;
   getDbUsers(q)
@@ -40,7 +42,7 @@ export const getAllUsersRoute = (req, res) => {
     });
 };
 
-export const getUserWithIdRoute = (req, res) => {
+export const getUserWithIdRoute = (req: Request, res: Response) => {
   const userId = req.params.id;
   if (!userId) {
     return res.status(400).json({ success: false, reason: "User not found" });
@@ -59,7 +61,7 @@ export const getUserWithIdRoute = (req, res) => {
     });
 };
 
-export const getUserDataRoute = (req, res) => {
+export const getUserDataRoute = (req: Request, res: Response) => {
   const userId = req.params.id;
   if (parseInt(userId) !== req.user) {
     //TODO: create new route for userInformation that can be safetly sent to client
@@ -76,7 +78,7 @@ export const getUserDataRoute = (req, res) => {
     });
 };
 
-export const editUserWithIdRoute = (req, res) => {
+export const editUserWithIdRoute = (req: Request, res: Response) => {
   const userId = req.params.id;
   if (parseInt(userId) !== req.user) {
     return res.status(403).json({ success: false, reason: "Access denied" });
@@ -96,7 +98,7 @@ export const editUserWithIdRoute = (req, res) => {
     });
 };
 
-export const deleteUserWithIdRoute = (req, res) => {
+export const deleteUserWithIdRoute = (req: Request, res: Response) => {
   const userId = req.params.id;
 
   if (parseInt(userId) !== req.user) {
@@ -117,21 +119,40 @@ export const deleteUserWithIdRoute = (req, res) => {
     });
 };
 
-export const uploadProfilePictureRoute = async (req, res) => {
+export const uploadProfilePictureRoute = async (req: Request, res: Response) => {
   const userId = req.user;
-  console.log(req.files);
+
+  if (!req.files) {
+    return res.sendStatus(400);
+  }
+
   if (req.files.length == 0) {
     return res.sendStatus(400);
   }
 
-  const file = req.files.at(0);
+  const files = req.files as unknown as ExtendedIncomingFile[];
+  const file = files.at(0);
+
+  if (!file) {
+    return res.sendStatus(400);
+  }
+
   //TODO (Backlog) : Create more sophisticated method to check if the uploaded file type is accepted
   if (file.mimetype.substring(0, 6).valueOf() !== "image/".valueOf()) {
     return res.sendStatus(400);
   }
   createPhotoThumbnails(req.files);
   const fileData = await addUploadedFilesData(userId, req.files);
-  setUserProfilePicture(userId, fileData.at(0).id);
+  if (!fileData) {
+    return res.sendStatus(500);
+  }
+
+  if (!fileData.at(0)) {
+    return res.sendStatus(500);
+  }
+  const fileId = fileData.at(0)?.id;
+
+  setUserProfilePicture(userId, fileId);
   //TODO: Check for errors
   res.sendStatus(200);
 };

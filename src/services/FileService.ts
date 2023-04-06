@@ -2,9 +2,10 @@ import sharp from "sharp";
 import File from "../models/File.js";
 import UserProfile from "../models/UserProfile.js";
 import { BelongsTo } from "sequelize";
+import ExtendedIncomingFile from "../utils/types/ExtendedIncomingFile.js";
 
-export const addUploadedFilesData = (ownerId, filesArray, postId = 0) => {
-  const filesData = filesArray.map((val) => {
+export const addUploadedFilesData = (ownerId: number, filesArray: ExtendedIncomingFile[], postId = 0) => {
+  const filesData = filesArray.map((val: ExtendedIncomingFile) => {
     return {
       originalName: val.originalname,
       storedName: val.filename,

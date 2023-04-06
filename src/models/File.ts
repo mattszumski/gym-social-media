@@ -1,7 +1,19 @@
 import sequelize from "../configs/dbConnection.js";
 import { DataTypes, Model } from "sequelize";
 
-class File extends Model {}
+class File extends Model {
+  declare id: number;
+  declare originalName: string;
+  declare storedName: string;
+  declare location: string;
+  declare mimetype: string;
+  declare encoding: string;
+  declare ownerId: number;
+  declare privacy: number;
+  declare gallery: boolean;
+  declare postId: number;
+  declare path: string;
+}
 
 File.init(
   {

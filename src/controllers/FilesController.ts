@@ -1,8 +1,10 @@
 import { addUploadedFilesData, getPhotoWithId, getUserPhotos, createPhotoThumbnails, getUserProfilePhotoData } from "../services/FileService.js";
+import { Request, Response } from "express";
+import ExtendedIncomingFile from "../utils/types/ExtendedIncomingFile.js";
 
 const photoSizes = ["sm", "md"];
 
-export const uploadFilesRoute = (req, res) => {
+export const uploadFilesRoute = (req: Request, res: Response) => {
   const userId = req.user;
 
   createPhotoThumbnails(req.files);
@@ -17,7 +19,7 @@ export const uploadFilesRoute = (req, res) => {
     });
 };
 
-export const getPhotoPathWithIdRoute = (req, res) => {
+export const getPhotoPathWithIdRoute = (req: Request, res: Response) => {
   const photoId = req.params.id;
   getPhotoWithId(photoId)
     .then((result) => {
@@ -32,7 +34,7 @@ export const getPhotoPathWithIdRoute = (req, res) => {
     });
 };
 
-export const getUserPhotosRoute = (req, res) => {
+export const getUserPhotosRoute = (req: Request, res: Response) => {
   const userId = req.params.userId;
   getUserPhotos(userId)
     .then((result) => {
@@ -46,7 +48,7 @@ export const getUserPhotosRoute = (req, res) => {
     });
 };
 
-export const getUserProfilePhotoRoute = (req, res) => {
+export const getUserProfilePhotoRoute = (req: Request, res: Response) => {
   const userId = req.params.userId;
 
   getUserProfilePhotoData(userId)
@@ -65,7 +67,7 @@ export const getUserProfilePhotoRoute = (req, res) => {
     });
 };
 
-export const getResizedUserProfilePhotoRoute = (req, res) => {
+export const getResizedUserProfilePhotoRoute = (req: Request, res: Response) => {
   const { userId, size } = req.params;
   if (!photoSizes.includes(size)) {
     return res.status(400).json({ msg: "Incorrect photo size" });
@@ -87,7 +89,7 @@ export const getResizedUserProfilePhotoRoute = (req, res) => {
     });
 };
 
-export const insertPostPhotos = (userId, postId, photos) => {
+export const insertPostPhotos = (userId: number, postId: number, photos: ExtendedIncomingFile[]) => {
   createPhotoThumbnails(photos);
   return addUploadedFilesData(userId, photos, postId);
 };

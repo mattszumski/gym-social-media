@@ -1,6 +1,7 @@
 import { editUserSettingsData, getUserSettingsDataByUserId } from "../services/UserSettingsService.js";
+import { Request, Response } from "express";
 
-export const getUserSettingsRoute = (req, res) => {
+export const getUserSettingsRoute = (req: Request, res: Response) => {
   const userId = req.user;
   getUserSettingsDataByUserId(userId)
     .then((result) => {
@@ -16,7 +17,7 @@ export const getUserSettingsRoute = (req, res) => {
 };
 
 //patch user settings
-export const editUserSettingsRoute = (req, res) => {
+export const editUserSettingsRoute = (req: Request, res: Response) => {
   const userId = req.user;
   editUserSettingsData(userId, req.body)
     .then((result) => {

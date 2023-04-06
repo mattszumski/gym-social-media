@@ -2,6 +2,7 @@ import { createPost, deletePost, editPost, getPostById, getUserPosts, getUserFri
 import { insertPostPhotos } from "./FilesController.js";
 
 export const createPostRoute = (req, res) => {
+  console.log(files);
   if (!req?.body?.text && !req?.files?.length) {
     return res.status(400).json({ success: false, reason: "No data" });
   }

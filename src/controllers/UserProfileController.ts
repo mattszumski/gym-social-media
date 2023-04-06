@@ -1,6 +1,7 @@
 import { createUserProfileData, editUserProfileData, getUserProfileDataByUserId } from "../services/UserProfileService.js";
+import { Request, Response } from "express";
 
-export const getUserProfileRoute = (req, res) => {
+export const getUserProfileRoute = (req: Request, res: Response) => {
   const userId = req.params.id;
   if (!userId) {
     return res.status(400).json({ success: false, reason: "User not found" });
@@ -16,7 +17,7 @@ export const getUserProfileRoute = (req, res) => {
     });
 };
 
-export const editUserProfileRoute = async (req, res) => {
+export const editUserProfileRoute = async (req: Request, res: Response) => {
   const userId = req.params.id;
   if (parseInt(userId) !== req.user) {
     return res.status(403).json({ success: false, reason: "Access denied" });
