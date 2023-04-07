@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import {
   addFriend,
   getUserFriendsData,
@@ -12,8 +13,8 @@ import {
   acceptFriendRequest,
 } from "../services/FriendService.js";
 
-export const addFriendRoute = async (req, res) => {
-  const userId = req.user;
+export const addFriendRoute = async (req: Request, res: Response) => {
+  const userId = req.user as number;
   const { friendId } = req.body;
   if (!userId || !friendId) {
     return res.sendStatus(400);
@@ -35,8 +36,8 @@ export const addFriendRoute = async (req, res) => {
     });
 };
 
-export const getUserFriendsRoute = (req, res) => {
-  const userId = req.user;
+export const getUserFriendsRoute = (req: Request, res: Response) => {
+  const userId = req.user as number;
   getUserFriendsData(userId)
     .then((result) => {
       return res.status(200).json(result);
@@ -47,9 +48,9 @@ export const getUserFriendsRoute = (req, res) => {
     });
 };
 
-export const getFriendsByUserIdRoute = (req, res) => {
+export const getFriendsByUserIdRoute = (req: Request, res: Response) => {
   const { userId } = req.params;
-  getUserFriendsData(userId)
+  getUserFriendsData(parseInt(userId))
     .then((result) => {
       return res.status(200).json(result);
     })
@@ -59,8 +60,8 @@ export const getFriendsByUserIdRoute = (req, res) => {
     });
 };
 
-export const removeFriendRoute = (req, res) => {
-  const userId = req.user;
+export const removeFriendRoute = (req: Request, res: Response) => {
+  const userId = req.user as number;
   const { friendId } = req.body;
 
   if (!userId || !friendId) {
@@ -77,8 +78,8 @@ export const removeFriendRoute = (req, res) => {
     });
 };
 
-export const createFriendRequestRoute = async (req, res) => {
-  const userId = req.user;
+export const createFriendRequestRoute = async (req: Request, res: Response) => {
+  const userId = req.user as number;
   const { recipientId } = req.body;
   console.log(recipientId);
   if (!userId || !recipientId) {
@@ -104,8 +105,8 @@ export const createFriendRequestRoute = async (req, res) => {
       res.sendStatus(400);
     });
 };
-export const removeFriendRequestRoute = (req, res) => {
-  const userId = req.user;
+export const removeFriendRequestRoute = (req: Request, res: Response) => {
+  const userId = req.user as number;
   const { senderId } = req.query;
   if (!userId || !senderId) {
     return res.sendStatus(400);
@@ -120,8 +121,8 @@ export const removeFriendRequestRoute = (req, res) => {
     });
 };
 
-export const getUserFriendRequestsRoute = (req, res) => {
-  const userId = req.user;
+export const getUserFriendRequestsRoute = (req: Request, res: Response) => {
+  const userId = req.user as number;
   getUserFriendRequests(userId)
     .then((result) => {
       return res.status(200).json(result);
@@ -132,8 +133,8 @@ export const getUserFriendRequestsRoute = (req, res) => {
     });
 };
 
-export const getFriendRequestsSentRoute = (req, res) => {
-  const userId = req.user;
+export const getFriendRequestsSentRoute = (req: Request, res: Response) => {
+  const userId = req.user as number;
   getFriendRequestsSent(userId)
     .then((result) => {
       return res.status(200).json(result);
@@ -144,8 +145,8 @@ export const getFriendRequestsSentRoute = (req, res) => {
     });
 };
 
-export const acceptFriendRequestRoute = (req, res) => {
-  const userId = req.user;
+export const acceptFriendRequestRoute = (req: Request, res: Response) => {
+  const userId = req.user as number;
   const { recipientId } = req.body;
   acceptFriendRequest(userId, recipientId)
     .then((result) => {
@@ -156,8 +157,8 @@ export const acceptFriendRequestRoute = (req, res) => {
     });
 };
 
-export const cancelFriendRequestRoute = (req, res) => {
-  const userId = req.user;
+export const cancelFriendRequestRoute = (req: Request, res: Response) => {
+  const userId = req.user as number;
   const { recipientId } = req.body;
   cancelSentFriendRequest(userId, recipientId)
     .then((result) => {

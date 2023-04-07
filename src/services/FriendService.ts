@@ -5,7 +5,7 @@ import UserProfile from "../models/UserProfile.js";
 import File from "../models/File.js";
 import { BelongsTo, Op } from "sequelize";
 
-export const addFriend = async (userId, friendId) => {
+export const addFriend = async (userId: number, friendId: number) => {
   try {
     const friend = Friend.create({ userId, friendId });
   } catch (error) {
@@ -13,7 +13,7 @@ export const addFriend = async (userId, friendId) => {
   }
 };
 
-const findFriend = (userId, friendId) => {
+const findFriend = (userId: number, friendId: number) => {
   return Friend.findOne({
     where: {
       [Op.or]: [
@@ -24,7 +24,7 @@ const findFriend = (userId, friendId) => {
   });
 };
 
-export const getUserFriends = async (userId) => {
+export const getUserFriends = async (userId: number) => {
   const friends = Friend.findAll({
     where: {
       [Op.or]: [{ userId }, { friendId: userId }],
@@ -34,14 +34,14 @@ export const getUserFriends = async (userId) => {
   return friends;
 };
 
-export const removeFriend = async (userId, friendId) => {
+export const removeFriend = async (userId: number, friendId: number) => {
   const friend = await findFriend(userId, friendId);
   if (friend) {
     friend.destroy();
   }
 };
 
-export const createFriendRequest = async (userId, recipientId) => {
+export const createFriendRequest = async (userId: number, recipientId: number) => {
   try {
     const friendRequest = FriendRequest.create({ userId, recipientId });
   } catch (error) {
@@ -49,7 +49,7 @@ export const createFriendRequest = async (userId, recipientId) => {
   }
 };
 
-export const getUserFriendRequests = (userId) => {
+export const getUserFriendRequests = (userId: number) => {
   return FriendRequest.findAll({
     include: [
       {
@@ -62,7 +62,7 @@ export const getUserFriendRequests = (userId) => {
     where: { recipientId: userId },
   });
 };
-export const getFriendRequestsSent = (userId) => {
+export const getFriendRequestsSent = (userId: number) => {
   return FriendRequest.findAll({
     include: [
       {
@@ -76,7 +76,7 @@ export const getFriendRequestsSent = (userId) => {
   });
 };
 
-export const removeFriendRequest = async (userId, senderId) => {
+export const removeFriendRequest = async (userId: number, senderId: number) => {
   const friendRequest = await FriendRequest.findOne({
     where: { recipientId: userId, userId: senderId },
   });
@@ -85,7 +85,7 @@ export const removeFriendRequest = async (userId, senderId) => {
   }
 };
 
-export const checkIfUsersAreAlreadyFriends = async (userId, friendId) => {
+export const checkIfUsersAreAlreadyFriends = async (userId: number, friendId: number) => {
   const friend = await findFriend(userId, friendId);
   if (friend) {
     return true;
@@ -93,7 +93,7 @@ export const checkIfUsersAreAlreadyFriends = async (userId, friendId) => {
   return false;
 };
 
-export const getUserFriendsIds = async (userId) => {
+export const getUserFriendsIds = async (userId: number) => {
   const userFriends = await getUserFriends(userId);
   return userFriends.map((friend) => {
     if (friend.userId == userId) {
@@ -104,7 +104,7 @@ export const getUserFriendsIds = async (userId) => {
   });
 };
 
-export const getUserFriendsData = async (userId) => {
+export const getUserFriendsData = async (userId: number) => {
   const userFriendsIds = await getUserFriendsIds(userId);
   console.log(userId);
   console.log(userFriendsIds);
@@ -131,7 +131,7 @@ export const getUserFriendsData = async (userId) => {
   });
 };
 
-export const acceptFriendRequest = async (userId, recipientId) => {
+export const acceptFriendRequest = async (userId: number, recipientId: number) => {
   return addFriend(userId, recipientId)
     .then(async (result) => {
       const friendRequest = await FriendRequest.findOne({
@@ -147,7 +147,7 @@ export const acceptFriendRequest = async (userId, recipientId) => {
     });
 };
 
-export const cancelSentFriendRequest = async (userId, recipientId) => {
+export const cancelSentFriendRequest = async (userId: number, recipientId: number) => {
   const friendRequest = await FriendRequest.findOne({
     where: { userId, recipientId },
   });
@@ -156,14 +156,14 @@ export const cancelSentFriendRequest = async (userId, recipientId) => {
   }
 };
 
-export const checkIfFriendRequestBetweenUsersExists = async (userId, recipientId) => {
+export const checkIfFriendRequestBetweenUsersExists = async (userId: number, recipientId: number) => {
   let requestSent = checkIfUserSentFriendRequestToOther(userId, recipientId);
   let requestReceived = checkIfUserReceivedFriendRequestFromOther(userId, recipientId);
 
   return requestSent || requestReceived;
 };
 
-export const checkIfUserSentFriendRequestToOther = async (userId, recipientId) => {
+export const checkIfUserSentFriendRequestToOther = async (userId: number, recipientId: number) => {
   const result = await FriendRequest.findOne({
     where: {
       userId,
@@ -177,7 +177,7 @@ export const checkIfUserSentFriendRequestToOther = async (userId, recipientId) =
   return false;
 };
 
-export const checkIfUserReceivedFriendRequestFromOther = async (userId, recipientId) => {
+export const checkIfUserReceivedFriendRequestFromOther = async (userId: number, recipientId: number) => {
   const result = await FriendRequest.findOne({
     where: {
       recipientId: userId,

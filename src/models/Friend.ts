@@ -1,7 +1,11 @@
 import sequelize from "../configs/dbConnection.js";
 import { DataTypes, Model } from "sequelize";
 
-class Friend extends Model {}
+class Friend extends Model {
+  declare id: number;
+  declare userId: number;
+  declare friendId: number;
+}
 
 Friend.init(
   {
