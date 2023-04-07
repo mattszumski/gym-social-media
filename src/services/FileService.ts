@@ -20,18 +20,18 @@ export const addUploadedFilesData = (ownerId: number, filesArray: ExtendedIncomi
   return File.bulkCreate(filesData);
 };
 
-export const createPhotoThumbnails = async (filesArray) => {
-  filesArray.forEach((element) => {
+export const createPhotoThumbnails = async (filesArray: ExtendedIncomingFile[]) => {
+  filesArray.forEach((element: ExtendedIncomingFile) => {
     sharp(element.path).resize(200).toFile(`${element.destination}md-${element.filename}`);
     sharp(element.path).resize(40).toFile(`${element.destination}sm-${element.filename}`);
   });
 };
 
-export const getPhotoWithId = (photoId) => {
+export const getPhotoWithId = (photoId: number) => {
   return File.findByPk(photoId);
 };
 
-export const getUserPhotos = (userId) => {
+export const getUserPhotos = (userId: number) => {
   return File.findAll({
     where: {
       ownerId: userId,
@@ -40,7 +40,7 @@ export const getUserPhotos = (userId) => {
   });
 };
 
-export const getUserProfilePhotoData = (userId) => {
+export const getUserProfilePhotoData = (userId: number) => {
   return File.findOne({
     include: [
       {

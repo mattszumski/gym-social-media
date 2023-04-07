@@ -1,6 +1,9 @@
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import { checkIfTokenOnBlacklist } from "../services/TokenService.js";
 import { getBearerTokenFromReq } from "../utils/AuthUtils.js";
+import { PassportStatic } from "passport";
+import { Request } from "express";
+import { VerifiedCallback } from "passport-jwt";
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -8,9 +11,9 @@ const options = {
   passReqToCallback: true,
 };
 
-export default (passport) => {
+export default (passport: PassportStatic) => {
   passport.use(
-    new JwtStrategy(options, async function (req, payload, done) {
+    new JwtStrategy(options, async function (req: Request, payload: any, done: VerifiedCallback) {
       try {
         const isExpired = await checkIfTokenOnBlacklist(getBearerTokenFromReq(req));
         if (isExpired) {
@@ -21,11 +24,6 @@ export default (passport) => {
         console.log(error);
         done(error);
       }
-
-      //find user, by extracting id from token
-      //check for db error
-      //check if user exists
-      //return error otherwise
     })
   );
 };

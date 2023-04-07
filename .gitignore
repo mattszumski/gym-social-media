@@ -129,6 +129,7 @@ dist
 #user file uploads
 src/data/uploads
 src/public/
+public/data/uploads
 
 #vscode 
 .vscode/

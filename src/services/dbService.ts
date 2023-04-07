@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import { createUserInDb } from "./UserService.js";
 import { createUserAuthInDb } from "./UserAuthService.js";
 
+dotenv.config();
+
 export const setupDb = async () => {
   return dbConnection.sync({
     force: true,
@@ -33,7 +35,7 @@ export const setupBasicUsers = async () => {
         return result.get("id");
       })
       .then((userId) => {
-        createUserAuthInDb(userId, newUserData.password);
+        createUserAuthInDb(userId, newUserData.password!);
       })
       .catch((error) => {
         console.log(error);

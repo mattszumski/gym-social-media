@@ -5,11 +5,16 @@ import ExtendedIncomingFile from "../utils/types/ExtendedIncomingFile.js";
 const photoSizes = ["sm", "md"];
 
 export const uploadFilesRoute = (req: Request, res: Response) => {
-  const userId = req.user;
+  const userId = req.user as number;
 
-  createPhotoThumbnails(req.files);
+  if (!req.files) {
+    return res.sendStatus(400);
+  }
 
-  addUploadedFilesData(userId, req.files)
+  const files = req.files as unknown as ExtendedIncomingFile[];
+  createPhotoThumbnails(files);
+
+  addUploadedFilesData(userId, files)
     .then((result) => {
       return res.sendStatus(201);
     })
@@ -21,7 +26,7 @@ export const uploadFilesRoute = (req: Request, res: Response) => {
 
 export const getPhotoPathWithIdRoute = (req: Request, res: Response) => {
   const photoId = req.params.id;
-  getPhotoWithId(photoId)
+  getPhotoWithId(parseInt(photoId))
     .then((result) => {
       if (!result) {
         return res.status(404).json({ success: false, reason: "Not found" });
@@ -36,7 +41,8 @@ export const getPhotoPathWithIdRoute = (req: Request, res: Response) => {
 
 export const getUserPhotosRoute = (req: Request, res: Response) => {
   const userId = req.params.userId;
-  getUserPhotos(userId)
+
+  getUserPhotos(parseInt(userId))
     .then((result) => {
       if (!result) {
         return res.status(404).json({ success: false, reason: "Not found" });
@@ -51,7 +57,7 @@ export const getUserPhotosRoute = (req: Request, res: Response) => {
 export const getUserProfilePhotoRoute = (req: Request, res: Response) => {
   const userId = req.params.userId;
 
-  getUserProfilePhotoData(userId)
+  getUserProfilePhotoData(parseInt(userId))
     .then((result) => {
       let path = "";
       let found = false;
@@ -73,7 +79,7 @@ export const getResizedUserProfilePhotoRoute = (req: Request, res: Response) => 
     return res.status(400).json({ msg: "Incorrect photo size" });
   }
 
-  getUserProfilePhotoData(userId)
+  getUserProfilePhotoData(parseInt(userId))
     .then((result) => {
       let path = "";
       let found = false;
