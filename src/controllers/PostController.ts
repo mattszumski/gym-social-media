@@ -1,18 +1,27 @@
+import { Request, Response } from "express";
 import { createPost, deletePost, editPost, getPostById, getUserPosts, getUserFriendsPosts, checkIfPostBelongsToUser, addPostComment, getPostComments } from "../services/PostService.js";
 import { insertPostPhotos } from "./FilesController.js";
+import ExtendedIncomingFile from "../utils/types/ExtendedIncomingFile.js";
 
-export const createPostRoute = (req, res) => {
-  console.log(files);
-  if (!req?.body?.text && !req?.files?.length) {
+export const createPostRoute = (req: Request, res: Response) => {
+  const userId = req.user as number;
+  let containFiles = false;
+  if (req.files && (req.files.length as number) > 0) {
+    containFiles = true;
+  }
+
+  const files = req.files as unknown as ExtendedIncomingFile[];
+
+  if (!req?.body?.text && !containFiles) {
     return res.status(400).json({ success: false, reason: "No data" });
   }
   const text = req?.body?.text || "";
 
-  createPost({ userId: req.user, text })
+  createPost({ userId, text })
     .then((result) => {
       if (result) {
-        if (req?.files?.length) {
-          insertPostPhotos(req.user, result.id, req.files);
+        if (containFiles) {
+          insertPostPhotos(userId, result.id, files);
         }
 
         return res.status(201).json(result);
@@ -23,8 +32,8 @@ export const createPostRoute = (req, res) => {
     });
 };
 
-export const getPostRoute = (req, res) => {
-  const postId = req.params.postId;
+export const getPostRoute = (req: Request, res: Response) => {
+  const postId = parseInt(req.params.postId);
   getPostById(postId)
     .then((result) => {
       if (result) {
@@ -38,8 +47,8 @@ export const getPostRoute = (req, res) => {
     });
 };
 
-export const getPostForUserRoute = (req, res) => {
-  const userId = req.params.userId;
+export const getPostForUserRoute = (req: Request, res: Response) => {
+  const userId = parseInt(req.params.userId);
   if (!userId) {
     res.sendStatus(400);
   }
@@ -54,8 +63,8 @@ export const getPostForUserRoute = (req, res) => {
     });
 };
 
-export const getPostForUserDashboardRoute = (req, res) => {
-  const userId = req.user;
+export const getPostForUserDashboardRoute = (req: Request, res: Response) => {
+  const userId = req.user as number;
   if (!userId) {
     res.sendStatus(400);
   }
@@ -69,9 +78,9 @@ export const getPostForUserDashboardRoute = (req, res) => {
     });
 };
 
-export const editPostRoute = (req, res) => {
-  const userId = req.user;
-  const postId = req.params.postId;
+export const editPostRoute = (req: Request, res: Response) => {
+  const userId = req.user as number;
+  const postId = parseInt(req.params.postId);
   const isUserPost = checkIfPostBelongsToUser(userId, postId);
   if (!isUserPost) {
     return res.status(403).json({ success: false, reason: "Access denied" });
@@ -87,9 +96,9 @@ export const editPostRoute = (req, res) => {
     });
 };
 
-export const deletePostRoute = (req, res) => {
-  const userId = req.user;
-  const postId = req.params.postId;
+export const deletePostRoute = (req: Request, res: Response) => {
+  const userId = req.user as number;
+  const postId = parseInt(req.params.postId);
   const isUserPost = checkIfPostBelongsToUser(userId, postId);
   if (!isUserPost) {
     return res.status(403).json({ success: false, reason: "Access denied" });
@@ -104,8 +113,8 @@ export const deletePostRoute = (req, res) => {
     });
 };
 
-export const addPostCommentRoute = (req, res) => {
-  const userId = req.user;
+export const addPostCommentRoute = (req: Request, res: Response) => {
+  const userId = req.user as number;
   const { postId, text } = req.body;
   if (!postId || !text) {
     return res.sendStatus(400);
@@ -121,14 +130,18 @@ export const addPostCommentRoute = (req, res) => {
     });
 };
 
-export const getPostCommentsRoute = (req, res) => {
-  const { postId } = req.query;
+export const getPostCommentsRoute = (req: Request, res: Response) => {
+  let { postId } = req.query;
 
   if (!postId) {
     return res.sendStatus(400);
   }
 
-  getPostComments(postId)
+  if (Array.isArray(postId)) {
+    return res.sendStatus(400);
+  }
+
+  getPostComments(parseInt(postId as string))
     .then((result) => {
       return res.status(200).json(result);
     })
@@ -138,5 +151,5 @@ export const getPostCommentsRoute = (req, res) => {
     });
 };
 
-export const editPostCommentRoute = (req, res) => {};
-export const deletePostCommentRoute = (req, res) => {};
+export const editPostCommentRoute = (req: Request, res: Response) => {};
+export const deletePostCommentRoute = (req: Request, res: Response) => {};

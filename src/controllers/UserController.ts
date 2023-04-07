@@ -120,7 +120,7 @@ export const deleteUserWithIdRoute = (req: Request, res: Response) => {
 };
 
 export const uploadProfilePictureRoute = async (req: Request, res: Response) => {
-  const userId = req.user;
+  const userId = req.user as number;
 
   if (!req.files) {
     return res.sendStatus(400);
@@ -141,8 +141,8 @@ export const uploadProfilePictureRoute = async (req: Request, res: Response) => 
   if (file.mimetype.substring(0, 6).valueOf() !== "image/".valueOf()) {
     return res.sendStatus(400);
   }
-  createPhotoThumbnails(req.files);
-  const fileData = await addUploadedFilesData(userId, req.files);
+  createPhotoThumbnails(files);
+  const fileData = await addUploadedFilesData(userId, files);
   if (!fileData) {
     return res.sendStatus(500);
   }

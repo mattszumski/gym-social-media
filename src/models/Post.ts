@@ -2,7 +2,13 @@ import sequelize from "../configs/dbConnection.js";
 import { DataTypes, Model } from "sequelize";
 import PostComments from "./PostComments.js";
 
-class Post extends Model {}
+class Post extends Model {
+  declare id: number;
+  declare text: string;
+  declare media: string;
+  declare edited: boolean;
+  declare userId: number;
+}
 
 Post.init(
   {

@@ -5,8 +5,9 @@ import PostComments from "../models/PostComments.js";
 import User from "../models/User.js";
 import UserProfile from "../models/UserProfile.js";
 import { getUserFriendsIds } from "./FriendService.js";
+import PostData from "../utils/types/PostData.js";
 
-export const createPost = async (postData) => {
+export const createPost = async (postData: PostData) => {
   try {
     return Post.create(postData);
   } catch (error) {
@@ -14,21 +15,21 @@ export const createPost = async (postData) => {
   }
 };
 
-export const getPostById = (postId) => {
+export const getPostById = (postId: number) => {
   const post = Post.findByPk(postId);
   return post;
 };
 
-export const getUserPosts = (userId) => {
+export const getUserPosts = (userId: number) => {
   return getPostsByUserIds([userId]);
 };
 
-export const getUserFriendsPosts = async (userId) => {
+export const getUserFriendsPosts = async (userId: number) => {
   const userFriendsIds = await getUserFriendsIds(userId);
   return getPostsByUserIds([userId, ...userFriendsIds]);
 };
 
-export const getPostsByUserIds = async (userIds) => {
+export const getPostsByUserIds = async (userIds: number[]) => {
   if (!Array.isArray(userIds)) {
     return Promise.reject("Invalid function argument");
   }
@@ -59,7 +60,8 @@ export const getPostsByUserIds = async (userIds) => {
         model: File,
         required: false,
         attributes: ["id", "storedName", "path"],
-        association: new HasMany(Post, File, { foreignKey: "postId", targetKey: "id", constraints: false }),
+        // association: new HasMany(Post, File, { foreignKey: "postId", targetKey: "id", constraints: false }), //TODO: test if everything will work ok without target key
+        association: new HasMany(Post, File, { foreignKey: "postId", constraints: false }),
       },
       {
         model: PostComments,
@@ -99,9 +101,12 @@ export const getPostsByUserIds = async (userIds) => {
   });
 };
 
-export const editPost = async (postId, postData) => {
+export const editPost = async (postId: number, postData: PostData) => {
   try {
     const post = await getPostById(postId);
+    if (!post) {
+      throw Error("Post not found");
+    }
     post.update({ ...postData, edited: true });
     return post;
   } catch (error) {
@@ -109,7 +114,7 @@ export const editPost = async (postId, postData) => {
   }
 };
 
-export const deletePost = async (postId) => {
+export const deletePost = async (postId: number) => {
   const post = await getPostById(postId);
   if (post) {
     return post.destroy();
@@ -117,19 +122,19 @@ export const deletePost = async (postId) => {
   return Promise.reject("Post not found");
 };
 
-export const checkIfPostBelongsToUser = async (userId, postId) => {
+export const checkIfPostBelongsToUser = async (userId: number, postId: number) => {
   const post = await getPostById(postId);
-  if (postId.userId === userId) {
+  if (post?.userId === userId) {
     return true;
   }
 
   return false;
 };
 
-export const addPostComment = (userId, postId, text) => {
+export const addPostComment = (userId: number, postId: number, text: string) => {
   return PostComments.create({ userId, PostId: postId, text });
 };
 
-export const getPostComments = (postId) => {
+export const getPostComments = (postId: number) => {
   return PostComments.findAll({ where: { postId }, attributes: ["id", "postId", "text"], order: [["createdAt", "ASC"]] });
 };
