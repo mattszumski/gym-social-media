@@ -127,8 +127,12 @@ dist
 .pnp.*
 
 #user file uploads
-data/uploads
-public/
+src/data/uploads
+src/public/
+public/data/uploads
 
 #vscode 
 .vscode/
+
+#ts builds
+dist
