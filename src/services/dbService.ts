@@ -14,14 +14,14 @@ export const setupDb = async () => {
 export const setupBasicUsers = async () => {
   const basicUsersData = [
     {
-      username: process.env.TEST_ACCOUNT_USERNAME,
-      email: process.env.TEST_ACCOUNT_EMAIL,
-      password: process.env.TEST_ACCOUNT_PASSWORD,
+      username: process.env.TEST_ACCOUNT_USERNAME || "",
+      email: process.env.TEST_ACCOUNT_EMAIL || "",
+      password: process.env.TEST_ACCOUNT_PASSWORD || "",
     },
     {
-      username: process.env.TEST_ACCOUNT_USERNAME2,
-      email: process.env.TEST_ACCOUNT_EMAIL2,
-      password: process.env.TEST_ACCOUNT_PASSWORD2,
+      username: process.env.TEST_ACCOUNT_USERNAME2 || "",
+      email: process.env.TEST_ACCOUNT_EMAIL2 || "",
+      password: process.env.TEST_ACCOUNT_PASSWORD2 || "",
     },
   ];
 
@@ -35,7 +35,7 @@ export const setupBasicUsers = async () => {
         return result.get("id");
       })
       .then((userId) => {
-        createUserAuthInDb(userId, newUserData.password!);
+        createUserAuthInDb(userId as number, newUserData.password!);
       })
       .catch((error) => {
         console.log(error);

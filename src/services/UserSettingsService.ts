@@ -1,7 +1,7 @@
 import dbConnection from "../configs/dbConnection.js";
 import UserSettings from "../models/UserSettings.js";
 
-export const createUserSettingsData = async (data) => {
+export const createUserSettingsData = async (data: UserSettings) => {
   const userSettings = UserSettings.create({ ...data });
 };
 

@@ -3,9 +3,10 @@ import { DataTypes, Model } from "sequelize";
 import UserSettings from "./UserSettings.js";
 import UserProfile from "./UserProfile.js";
 import Post from "./Post.js";
+import { IUser } from "../types/Interfaces/UserInterfaces.js";
 
-class User extends Model {
-  declare id: number;
+class User extends Model implements IUser {
+  declare id?: number;
   declare email: string;
   declare username: string;
   declare firstname?: string;

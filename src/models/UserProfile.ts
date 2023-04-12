@@ -1,7 +1,14 @@
 import sequelize from "../configs/dbConnection.js";
 import { DataTypes, Model } from "sequelize";
+import { IUserProfile } from "../types/Interfaces/UserInterfaces.js";
 
-class UserProfile extends Model {}
+class UserProfile extends Model implements IUserProfile {
+  declare id?: number;
+  declare city?: string;
+  declare gym?: string;
+  declare about?: string;
+  declare profilePhotoId?: string | number;
+}
 
 UserProfile.init(
   {

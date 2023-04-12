@@ -111,7 +111,9 @@ export const removeFriendRequestRoute = (req: Request, res: Response) => {
   if (!userId || !senderId) {
     return res.sendStatus(400);
   }
-  removeFriendRequest(userId, senderId)
+
+  //TODO: One function for checking from http body/query etc to number
+  removeFriendRequest(userId, parseInt(senderId as string))
     .then((result) => {
       res.status(200).json(result).send();
     })

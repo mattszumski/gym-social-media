@@ -1,7 +1,10 @@
 import sequelize from "../configs/dbConnection.js";
 import { DataTypes, Model } from "sequelize";
 
-class TokenBlacklist extends Model {}
+class TokenBlacklist extends Model {
+  declare id: number;
+  declare token: string;
+}
 
 TokenBlacklist.init(
   {

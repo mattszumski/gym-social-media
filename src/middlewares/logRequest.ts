@@ -1,7 +1,7 @@
 import logger from "../utils/RequestLogger.js";
+import { Request, Response, NextFunction } from "express";
 
-const logReqest = (req, res, next) => {
-  req.met;
+const logReqest = (req: Request, res: Response, next: NextFunction) => {
   const { host, origin } = req.headers;
   const originalUrl = req.originalUrl;
   const method = req.method;
