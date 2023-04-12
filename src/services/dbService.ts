@@ -32,7 +32,7 @@ export const setupBasicUsers = async () => {
           throw "User not created during setup. Please retry.";
         }
         console.log(result);
-        return result.get("id");
+        return result.id;
       })
       .then((userId) => {
         createUserAuthInDb(userId as number, newUserData.password!);

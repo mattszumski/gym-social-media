@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon /index.js ",
+    "dev": "nodemon dist/index.js ",
     "test": "mocha"
   },
-  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -41,6 +40,7 @@
     "chai": "^4.3.7",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.20",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "ts-node": "^10.9.1"
   }
 }

@@ -1,6 +1,6 @@
 import { addUploadedFilesData, getPhotoWithId, getUserPhotos, createPhotoThumbnails, getUserProfilePhotoData } from "../services/FileService.js";
 import { Request, Response } from "express";
-import ExtendedIncomingFile from "../utils/types/ExtendedIncomingFile.js";
+import ExtendedIncomingFile from "../types/ExtendedIncomingFile.js";
 
 const photoSizes = ["sm", "md"];
 

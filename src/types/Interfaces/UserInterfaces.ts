@@ -8,7 +8,7 @@ export interface IUser {
 }
 
 export interface IUserAuth extends IUser {
-  password: string;
+  password?: string;
 }
 
 export interface IUserProfile {
@@ -17,4 +17,9 @@ export interface IUserProfile {
   gym?: string;
   about?: string;
   profilePhotoId?: string | number;
+}
+
+export interface IUserSettings {
+  id?: number;
+  language?: string;
 }

@@ -5,7 +5,7 @@ import PostComments from "../models/PostComments.js";
 import User from "../models/User.js";
 import UserProfile from "../models/UserProfile.js";
 import { getUserFriendsIds } from "./FriendService.js";
-import PostData from "../utils/types/PostData.js";
+import PostData from "../types/PostData.js";
 
 export const createPost = async (postData: PostData) => {
   try {

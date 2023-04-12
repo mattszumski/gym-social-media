@@ -1,7 +1,7 @@
 import { pbkdf2Sync, randomBytes } from "crypto";
 import { Request } from "express";
 import jwt from "jsonwebtoken";
-import UserAuthData from "./types/UserAuthData";
+import UserAuthData from "../types/UserAuthData";
 
 export const validatePassword = (password: string, hash: string, salt: string) => {
   const hashedPassword = pbkdf2Sync(password, salt, 32000, 64, "sha512").toString("hex");

@@ -2,7 +2,7 @@ import { editUserSettingsData, getUserSettingsDataByUserId } from "../services/U
 import { Request, Response } from "express";
 
 export const getUserSettingsRoute = (req: Request, res: Response) => {
-  const userId = req.user;
+  const userId = req.user as number;
   getUserSettingsDataByUserId(userId)
     .then((result) => {
       if (result) {
@@ -18,7 +18,7 @@ export const getUserSettingsRoute = (req: Request, res: Response) => {
 
 //patch user settings
 export const editUserSettingsRoute = (req: Request, res: Response) => {
-  const userId = req.user;
+  const userId = req.user as number;
   editUserSettingsData(userId, req.body)
     .then((result) => {
       if (result) {

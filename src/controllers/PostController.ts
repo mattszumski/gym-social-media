@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { createPost, deletePost, editPost, getPostById, getUserPosts, getUserFriendsPosts, checkIfPostBelongsToUser, addPostComment, getPostComments } from "../services/PostService.js";
 import { insertPostPhotos } from "./FilesController.js";
-import ExtendedIncomingFile from "../utils/types/ExtendedIncomingFile.js";
+import ExtendedIncomingFile from "../types/ExtendedIncomingFile.js";
 
 export const createPostRoute = (req: Request, res: Response) => {
   const userId = req.user as number;

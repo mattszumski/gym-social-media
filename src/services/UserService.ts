@@ -3,9 +3,9 @@ import User, { profileAssociation, settingsAssociation } from "../models/User.js
 import UserProfile from "../models/UserProfile.js";
 import UserSettings from "../models/UserSettings.js";
 import { deleteUserAuthData } from "./UserAuthService.js";
-import { IUserAuth, IUserProfile } from "../types/Interfaces/UserInterfaces.js";
+import { IUser, IUserAuth, IUserProfile } from "../types/Interfaces/UserInterfaces.js";
 
-export const createUserInDb = async (userData: IUserAuth) => {
+export const createUserInDb = async (userData: IUserAuth): Promise<IUser> => {
   try {
     const creationData = { ...userData, userSetting: {}, userProfile: {} };
     const newUser = await User.create(creationData, { include: [settingsAssociation, profileAssociation] });

@@ -1,8 +1,11 @@
 import sequelize from "../configs/dbConnection.js";
 import { DataTypes, Model } from "sequelize";
-import User from "./User.js";
+import { IUserSettings } from "../types/Interfaces/UserInterfaces.js";
 
-class UserSettings extends Model {}
+class UserSettings extends Model implements IUserSettings {
+  declare id?: number;
+  declare language?: string;
+}
 
 UserSettings.init(
   {

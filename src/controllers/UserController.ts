@@ -3,7 +3,7 @@ import { addUploadedFilesData, createPhotoThumbnails } from "../services/FileSer
 import { createUserInDb, getDbUsers, getDbUserWithId, editDbUserWithId, deleteDbUserWithId, getUserData } from "../services/UserService.js";
 import { setUserProfilePicture } from "../services/UserProfileService.js";
 import { Request, Response } from "express";
-import ExtendedIncomingFile from "../utils/types/ExtendedIncomingFile.js";
+import ExtendedIncomingFile from "../types/ExtendedIncomingFile.js";
 
 //CHECK IF NEEDED
 export const createNewUserRoute = (req: Request, res: Response) => {
@@ -32,7 +32,7 @@ export const createNewUserRoute = (req: Request, res: Response) => {
 export const getAllUsersRoute = (req: Request, res: Response) => {
   //TODO: To be used only with filters (users looks for other users by search)
   const { q } = req.query;
-  getDbUsers(q)
+  getDbUsers(q as string)
     .then((result) => {
       res.status(200).json(result);
     })
@@ -47,7 +47,7 @@ export const getUserWithIdRoute = (req: Request, res: Response) => {
   if (!userId) {
     return res.status(400).json({ success: false, reason: "User not found" });
   }
-  getDbUserWithId(userId)
+  getDbUserWithId(parseInt(userId))
     .then((result) => {
       if (result) {
         res.status(200).json(result);
@@ -68,7 +68,7 @@ export const getUserDataRoute = (req: Request, res: Response) => {
     // return res.status(403).json({ success: false, reason: "Access denied" });
   }
 
-  getUserData(userId)
+  getUserData(parseInt(userId))
     .then((result) => {
       return res.status(200).json(result);
     })
@@ -79,8 +79,8 @@ export const getUserDataRoute = (req: Request, res: Response) => {
 };
 
 export const editUserWithIdRoute = (req: Request, res: Response) => {
-  const userId = req.params.id;
-  if (parseInt(userId) !== req.user) {
+  const userId = parseInt(req.params.id);
+  if (userId !== req.user) {
     return res.status(403).json({ success: false, reason: "Access denied" });
   }
 
@@ -99,9 +99,8 @@ export const editUserWithIdRoute = (req: Request, res: Response) => {
 };
 
 export const deleteUserWithIdRoute = (req: Request, res: Response) => {
-  const userId = req.params.id;
-
-  if (parseInt(userId) !== req.user) {
+  const userId = parseInt(req.params.id);
+  if (userId !== req.user) {
     return res.status(403).json({ success: false, reason: "Access denied" });
   }
 
@@ -150,9 +149,12 @@ export const uploadProfilePictureRoute = async (req: Request, res: Response) => 
   if (!fileData.at(0)) {
     return res.sendStatus(500);
   }
+  if (!fileData.at(0)?.id) {
+    return res.sendStatus(500);
+  }
   const fileId = fileData.at(0)?.id;
 
-  setUserProfilePicture(userId, fileId);
+  setUserProfilePicture(userId, fileId as number);
   //TODO: Check for errors
   res.sendStatus(200);
 };
